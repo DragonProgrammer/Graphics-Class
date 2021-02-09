@@ -13,11 +13,11 @@ using std::string;
  class REDirect: public RenderEngine
  {
 	public:
-		int x_dim; //same as display_xSize from rd_display.h
-		int y_dim;
-		float cordinate[3];
-		float active_color[3];
-		float back_color[3];
+//		int x_dim; //same as display_xSize from rd_display.h
+//		int y_dim;
+//		float cordinate[3];
+//		float active_color[3];
+//		float back_color[3];
 		 
 		 
 		 //    // Only methods inherited from the RenderEngine class should be added here,
