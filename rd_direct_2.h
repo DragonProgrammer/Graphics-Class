@@ -1,10 +1,9 @@
-#ifndef RD_BASE_ENGINE_H
-#define RD_BASE_ENGINE_H
-
+#ifndef RD_ENGINE_DIRECT_H
+#define RD_ENGINE_DIRECT_H
 #include <string>
 using std::string;
-
-class RenderEngine
+#include "rd_enginebase.h"
+class REDirect : public RenderEngine
 {
 	public:
 
@@ -161,12 +160,12 @@ int rd_option_string(const string & name, const string & value);
 
 int rd_custom(const string & label);
 
-~RenderEngine();
+~REDirect();
 
  };
 
 // Some useful helper functions
- int get_vertex_size(const string & vertex_type);
+ //int get_vertex_size(const string & vertex_type);
 // Returns the number of components in an attributed vertex type
 
  #endif /* RD_BASE_ENGINE_H */
