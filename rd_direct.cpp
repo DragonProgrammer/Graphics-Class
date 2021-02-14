@@ -2,7 +2,7 @@
 #include <string>
 #include "rd_display.h"
 #include "frame.h"
-#include "globals.cpp"
+#include "globals.h"
 using std::string;
 
 		/**********************   General functions  *******************************/
@@ -17,10 +17,10 @@ int REDirect::rd_format(int xresolution, int yresolution)
 
 int REDirect::rd_world_begin(void)
 {
-	if( current_id != -1){
+	if(current_id != -1){
 		images.push_back(current);
 	}
-	int new_id = get_next_Id();
+	int new_id = get_next_id();
 	rd_disp_init_frame(new_id);
 	current = set_frame(new_id);
 	rd_frame_begin(new_id);

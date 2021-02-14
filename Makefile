@@ -11,7 +11,7 @@ rd_view: libcs631.a rd_direct.o pnm_display.o rd_display.o rd_enginebase.o globa
 color.o: color.cpp	
 		$(CC) $(CCFLAGS) -c color.cpp
 
-global.o: globals.cpp
+global.o: globals.cpp globals.h
 		$(CC) $(CCFLAGS) -c globals.cpp
 
 frame.o: frame.h frame.cpp
