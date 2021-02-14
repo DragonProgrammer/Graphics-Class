@@ -7,10 +7,10 @@ class Frame{
 	int size_X;
 	int size_Y;
 	int frame_id;
-	int back_color[3] = {0, 0,0};
-	int act_color[3] = {1,1,1};
+	color back_color;
+	color active_color;
 
-	int frame_image;
+	vector< vector<color> > frame_image;
 
 	public:
 
@@ -21,9 +21,10 @@ class Frame{
 	void set_id(int id);
 		
 	int get_id();
-	int get_color(char select);
+	color get_color();
+	color get_color(int x, int y);
 
-	void set_Pixel(int x, int y);
+	void set_pixel(int x, int y);
 
 };
 
