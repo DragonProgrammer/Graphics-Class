@@ -1,5 +1,8 @@
 #include "rd_direct.h"
 #include <string>
+#include "rd_display.h"
+#include "frame.h"
+#include "globals.cpp"
 using std::string;
 
 		/**********************   General functions  *******************************/
@@ -14,21 +17,39 @@ int REDirect::rd_format(int xresolution, int yresolution)
 
 int REDirect::rd_world_begin(void)
 {
+	if( current_id != -1){
+		images.push_back(current);
+	}
+	int new_id = get_next_Id();
+	rd_disp_init_frame(new_id);
+	current = set_frame(new_id);
+	rd_frame_begin(new_id);
 	return 0;
 }
 
 int REDirect::rd_world_end(void)
 {
+	images.push_back(current);
+	frame_ids.push_back(current_id);
 	return 0;
 }
 
 int REDirect::rd_frame_begin(int frame_no)
 {
+	//this should change nothing
+	if(current_id != frame_no){
+		return-1;}
+	current.set_id(frame_no);
+	
 	return 0;
 }
 
 int REDirect::rd_frame_end(void)
 {
+	if(current_id != frame_ids.back()){
+	images.push_back(current);
+	frame_ids.push_back(current_id);
+	}
 	return 0;
 }
 
@@ -120,6 +141,7 @@ int REDirect::rd_line(const float start[3], const float end[3])
 
 int REDirect::rd_point(const float p[3])
 {
+	
 	return 0;
 }
 

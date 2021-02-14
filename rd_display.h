@@ -1,4 +1,4 @@
-fndef RD_DISPLAY_H
+#ifndef RD_DISPLAY_H
 #define RD_DISPLAY_H
 
 #include <string>
