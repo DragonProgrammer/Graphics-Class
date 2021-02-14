@@ -2,6 +2,7 @@
 #define RD_BASE_ENGINE_H
 
 #include <string>
+#include "frame.h"
 using std::string;
 
 class RenderEngine

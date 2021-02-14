@@ -1,13 +1,19 @@
 CC = g++
 CCFLAGS = -g -Wall
 
-rd_view: libcs631.a rd_direct.o pnm_display.o rd_display.o rd_enginebase.o
-		$(CC) -o rd_view $(CCFLAGS) libcs631.a rd_direct.o pnm_display.o rd_enginebase.o rd_display.o -lm -lX11
+rd_view: libcs631.a rd_direct.o pnm_display.o rd_display.o rd_enginebase.o global.o frame.o
+		$(CC) -o rd_view $(CCFLAGS) libcs631.a rd_direct.o pnm_display.o frame.o globals.o rd_enginebase.o rd_display.o -lm -lX11
 
 # Add whatever additional files and rules here, and also
 # # in the final linking rule above.
 
 #some of these might not need .cpp files
+
+global.o: globals.cpp
+		$(CC) $(CCFLAGS) -c globals.cpp
+
+frame.o: frame.h frame.cpp
+		$(CC) $(CCFLAGS) -c frame.cpp
 
 rd_enginebase.o: rd_enginebase.h
 #	 	$(CC) $(CCFLAGS) -c rd_enginebase.cpp
