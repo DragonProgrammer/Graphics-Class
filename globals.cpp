@@ -1,16 +1,28 @@
-//#iifdef GLOBALS_CPP
-//#define GLOBALS_CPP
-//#include "frame.h"
-//#include "rd_display.h"
+#include "frame.h"
+#include "rd_display.h"
 #include "globals.h"
-//#include <vector>
+#include <vector>
 using std::vector;
 int current_id = -1;
 Frame current;
 vector<Frame> images;
 vector<int> frame_ids;
+color background;
+color active;
 
-	int get_next_id(){
+void set_active(float color[3]){
+	active.r_scale = color[0];
+	active.g_scale = color[1];
+	active.b_scale = color[2];
+}
+
+void set_back(float color[3]){
+	background.r_scale = color[0];
+	background.g_scale = color[1];
+	background.b_scale = color[2];
+}
+
+int get_next_id(){
 		if(frame_ids.size() == 0){
 			return 0; //return 0 if there is curently no ids
 		}
@@ -22,24 +34,44 @@ vector<int> frame_ids;
 	}
 	}
 
-	Frame set_frame(int id){
-	//	int res_x ; //= display_xSize;
-	//	int res_y; // = display_ySize;
+void set_pixel(int x, int y){
+	current.frame_image[x][y]=active;
+}
+
+
+Frame set_frame(int id){
 		
 		Frame temp;
-		int black[3] = {0, 0, 0};
-		temp.set_back(black);
-	//	temp.set_size(res_x, res_y);
-	//	temp.frame_image = new int[res_x][res_y][3];
-		temp.set_frame_image();
-	//	int this_id = get_next_Id();
+		float black[3] = {0, 0, 0};
+		set_back(black);
+		float white[3] = {1,1,1};
+		set_active(white);
+		
+	for(int x = 0; x< display_xSize; x++){
+		for(int y = 0; x< display_ySize; y++){
+			temp.frame_image[x][y]=background;
+		}
+	}	
 		temp.set_id(id);
 		frame_ids.push_back(id);
 		current_id = id;
 		return temp;
-	}
-		
+	
+		}
 
-//#eindif
+color color_convert(color scale_input){
+	color scale = scale_input;
+	scale.r = scale.r_scale*255;	
+	scale.g = scale.g_scale*255;	
+	scale.b = scale.b_scale*255;
+	return scale;
+}
 
 
+color color_scale(color digit_input){
+	color scale = digit_input;
+	scale.r_scale = scale.r/255;
+	scale.g_scale = scale.g/255;
+	scale.b_scale = scale.b/255;
+	return scale;
+}

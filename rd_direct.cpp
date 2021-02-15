@@ -17,13 +17,17 @@ int REDirect::rd_format(int xresolution, int yresolution)
 
 int REDirect::rd_world_begin(void)
 {
-	if(current_id != -1){
-		images.push_back(current);
+	if(current_id != -1){   //if there is a frame alredy
+		images.push_back(current); //put it into the vector if frames
 	}
-	int new_id = get_next_id();
-	rd_disp_init_frame(new_id);
-	current = set_frame(new_id);
-	rd_frame_begin(new_id);
+
+	int new_id = get_next_id();  // gets next unsused number for id
+					//this was added now as we are going to soon be doing multiple frames
+
+	rd_disp_init_frame(new_id);  // called from rd_display
+	current = set_frame(new_id); //create a new frame in the globals
+					//this presumes that rd_format (above) was called to give us size
+	rd_frame_begin(new_id); // called from below
 	return 0;
 }
 
@@ -141,7 +145,11 @@ int REDirect::rd_line(const float start[3], const float end[3])
 
 int REDirect::rd_point(const float p[3])
 {
-	
+	float pigment[3];
+	pigment[0] = active.r_scale;
+	pigment[1] = active.g_scale;
+	pigment[2] = active.b_scale;
+	rd_write_pixel(p[0], p[1], pigment);
 	return 0;
 }
 
@@ -240,11 +248,36 @@ int REDirect::rd_tube(const float start[3], const float end[3], float radius)
 /********************  Lighting & Shading  ***************************/
 int REDirect::rd_background(const float color[])
 {
+
+	//probably do not need all this as background and active are already set on frame init
+	//to black and white
+	float default_c[] = {0,0,0};
+	if( color != default_c){
+	rd_set_background(color);
+	}
+	else
+		rd_set_background(default_c);
+
 	return 0;
 }
    // red, green, blue by default
 int REDirect::rd_color(const float color[])
-{
+{	
+	float default_c[] = {1,1,1};
+	if (color == default_c){
+		active.r_scale = 1; 
+		active.g_scale = 1; 
+		active.b_scale = 1;
+	}
+	else
+	{
+		active.r_scale = color[0]; 
+		active.g_scale = color[1]; 
+		active.b_scale = color[2];
+	}
+	       	active = color_convert(active);
+
+
 	return 0;
 }
 
