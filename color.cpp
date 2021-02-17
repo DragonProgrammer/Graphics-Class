@@ -1,13 +1,9 @@
-#ifndef COLOR_C
-#define COLOR_C
-struct color{
-	int r;
-	int g;
-	int b;
+#include "color.h"
+#include <iostream>
+using std::ostream;
 
-	float r_scale;
-	float g_scale;
-	float b_scale;
-};
-#endif
+ostream& operator << (ostream &os, const color &s) {
+	    return (os << "red: " << s.r << "\n green: " << s.g << "\n blue: " << s.b );
+}
+
 

@@ -1,6 +1,7 @@
 #ifndef RD_ENGINE_DIRECT_H
 #define RD_ENGINE_DIRECT_H
 #include <string>
+#include "error.h"
 using std::string;
 #include "rd_enginebase.h"
 class REDirect : public RenderEngine
@@ -19,25 +20,25 @@ int rd_world_end(void);
 int rd_frame_begin(int frame_no);
 
 int rd_frame_end(void);
-
-int rd_render_init(void);  /* Initialize renderer */
-
+/*
+int rd_render_init(void);  /i* Initialize renderer */
+/*
 int rd_render_cleanup(void);
 
- /**********************   Camera  ******************************************/
+ /s**********************   Camera  ******************************************/
 
 int rd_camera_eye(const float eyepoint[3]);
 
 int rd_camera_at(const float atpoint[3]);
 
 int rd_camera_up(const float up[3]);
-
+/*
 int rd_camera_fov(float fov);
 
 int rd_clipping(float znear, float zfar);
  
- /**********************   Transformations **********************************/
-
+ /w**********************   Transformations **********************************/
+/*
 int rd_translate(const float offset[3]);
 
 int rd_scale(const float scale_factor[3]);
@@ -54,14 +55,11 @@ int rd_xform_push(void);
 
 int rd_xform_pop(void);
 
-  /**********************   Geometric Objects  *******************************/
+  /s**********************   Geometric Objects  *******************************/
 
-int rd_line(const float start[3], const float end[3]);
 
-int rd_point(const float p[3]);
 
-int rd_circle(const float center[3], float radius);
-
+/*
 int rd_bezier_curve(const string & vertex_type, int degree, const float * vertex);
 
 int rd_bezier_patch(const string & vertex_type, int u_degree, int v_degree, const float * vertex);
@@ -69,9 +67,15 @@ int rd_bezier_patch(const string & vertex_type, int u_degree, int v_degree, cons
 int rd_catmull_clark_sds(const string & vertex_type, float * coord, int nvertex, int * vertex_list, int nface, int * crease_list, int ncrease, float *sharpness);
 
 
-int rd_lineset(const string & vertex_type, int nvertex, const float * vertex, int nseg, const int * seg);
+int rd_circle(const float center[3], float radius);
+*/
+int rd_line(const float start[3], const float end[3]);
+
+//int rd_lineset(const string & vertex_type, int nvertex, const float * vertex, int nseg, const int * seg);
 
 
+int rd_point(const float p[3]);
+/*
 int rd_pointset(const string & vertex_type, int nvertex, const float * vertex);
 
 int rd_polyset(const string & vertex_type, int nvertex, const float * vertex, int nface,   const int * face);
@@ -98,11 +102,12 @@ int rd_torus(float radius1, float radius2, float phimin, float phimax, float the
 
 int rd_tube(const float start[3], const float end[3], float radius);
 
-/********************  Lighting & Shading  ***************************/
+/.********************  Lighting & Shading  ***************************/
+
 int rd_background(const float color[]);
    // red, green, blue by default
 int rd_color(const float color[]);
-
+/*
 int rd_opacity(float opacity);
 
 int rd_emission(const float color[], float intensity);
@@ -134,8 +139,8 @@ int rd_attribute_push(void);
 
 int rd_attribute_pop(void);
 
- /****************************   Mapping ******************************/
-
+ /.****************************   Mapping ******************************/
+/*
 int rd_map_border(const string & map_type, const string & horizontal, const string & vertical);
 
 int rd_map_bound(const string & map_type, float s_min, float t_min, float s_max, float t_max);
@@ -146,8 +151,8 @@ int rd_map_sample(const string & map_type, const string & intra_level, const str
 
 int rd_map(const string & map_type, const string & label);
 
- /****************************  Options  **********************************/
-
+ /.****************************  Options  **********************************/
+/*
 int rd_option_array(const string & name, int n, const float *values);
 
 int rd_option_bool(const string & name, bool flag);
@@ -161,7 +166,7 @@ int rd_option_string(const string & name, const string & value);
 int rd_custom(const string & label);
 
 ~REDirect();
-
+*/
  };
 
 // Some useful helper functions

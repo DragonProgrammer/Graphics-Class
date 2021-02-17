@@ -45,9 +45,6 @@ virtual int rd_display(const string & name, const string & type,  const string &
 
   /**********************   Geometric Objects  *******************************/
 
- virtual int rd_line(const float start[3], const float end[3]);
- virtual int rd_point(const float p[3]);
- virtual int rd_circle(const float center[3], float radius);
 
  virtual int rd_bezier_curve(const string & vertex_type, int degree, const float * vertex);
 
@@ -56,9 +53,14 @@ virtual int rd_display(const string & name, const string & type,  const string &
  virtual int rd_catmull_clark_sds(const string & vertex_type, float * coord, int nvertex, int * vertex_list, int nface, int * crease_list, int ncrease, float *sharpness);
 
 
+ virtual int rd_circle(const float center[3], float radius);
+ 
+ virtual int rd_line(const float start[3], const float end[3]);
+ 
  virtual int rd_lineset(const string & vertex_type, int nvertex, const float * vertex, int nseg, const int * seg);
 
 
+ virtual int rd_point(const float p[3]);
  virtual int rd_pointset(const string & vertex_type, int nvertex, const float * vertex);
  virtual int rd_polyset(const string & vertex_type, int nvertex, const float * vertex, int nface,   const int * face);
 
@@ -81,10 +83,10 @@ virtual int rd_display(const string & name, const string & type,  const string &
    // red, green, blue by default
  virtual int rd_color(const float color[]);
 
- virtual int rd_fill(const float seed_point[3]);
  virtual int rd_opacity(float opacity);
-
  virtual int rd_emission(const float color[], float intensity);
+ virtual int rd_fill(const float seed_point[3]);
+
 
 
  virtual int rd_surface(const string & shader_type);

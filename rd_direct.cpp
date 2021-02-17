@@ -3,87 +3,108 @@
 #include "rd_display.h"
 #include "frame.h"
 #include "globals.h"
+#include "rd_error.h"
+#include <iostream>
 using std::string;
+using std::to_string;
+using std::cout;
+using std::endl;
 
 		/**********************   General functions  *******************************/
 int REDirect :: rd_display(const string & name, const string & type,  const string & mode){
-	return 0;
+	
+	return RD_OK;
 }
 
 int REDirect::rd_format(int xresolution, int yresolution)
 {
-	return 0;
+	return RD_OK;
 }
 
 int REDirect::rd_world_begin(void)
 {
-	if(current_id != -1){   //if there is a frame alredy
-		images.push_back(current); //put it into the vector if frames
-	}
 
-	int new_id = get_next_id();  // gets next unsused number for id
+//	if(current_id != -1){   //if there is a frame alredy
+//		images.push_back(current); //put it into the vector if frames
+//	}
+
+//	int new_id = get_next_id();  // gets next unsused number for id
 					//this was added now as we are going to soon be doing multiple frames
+	int rd_er = RD_OK;
+	rd_er = rd_disp_init_frame(current_id);  // called from rd_display
+	if(rd_er != 0){
+	cout << rd_er << endl;
+	}
+	//this presumes that rd_format (above) was called to give us size
+//	rd_frame_begin(1); // called from below
 
-	rd_disp_init_frame(new_id);  // called from rd_display
-	current = set_frame(new_id); //create a new frame in the globals
-					//this presumes that rd_format (above) was called to give us size
-	rd_frame_begin(new_id); // called from below
-	return 0;
+	return rd_er;
+
 }
 
 int REDirect::rd_world_end(void)
 {
+cout << "rd_world_end" << endl;	
 	images.push_back(current);
 	frame_ids.push_back(current_id);
-	return 0;
+	rd_disp_end_display();
+	return RD_OK;
 }
 
 int REDirect::rd_frame_begin(int frame_no)
 {
+	
+//	cout << "rd_frame_begin"  << endl;
 	//this should change nothing
-	if(current_id != frame_no){
-		return-1;}
+//	if(current_id != frame_no){
+//		return-1;}
+	current = set_frame(frame_no); //create a new frame in the globals
 	current.set_id(frame_no);
 	
-	return 0;
+	return RD_OK;
 }
 
 int REDirect::rd_frame_end(void)
 {
-	if(current_id != frame_ids.back()){
-	images.push_back(current);
-	frame_ids.push_back(current_id);
-	}
-	return 0;
-}
+cout << "rd_frame_end" << endl;	
 
+//	if(current_id != frame_ids.back()){
+//		cout << "in check" <<endl;
+//	images.push_back(current);
+//	frame_ids.push_back(current_id);
+//	}
+	rd_disp_end_frame();
+
+	return RD_OK;
+}
+/*
 int REDirect::rd_render_init(void)
 {
 return 0;
-}/* Initialize renderer */
-
+}/i* Initialize renderer */
+/*
 int REDirect::rd_render_cleanup(void)
 {
 	return 0;
 }
 
- /**********************   Camera  ******************************************/
+ /s**********************   Camera  ******************************************/
 
 int REDirect::rd_camera_eye(const float eyepoint[3])
 {
-	return 0;
+	return RD_OK;
 }
 
 int REDirect::rd_camera_at(const float atpoint[3])
 {
-	return 0;
+	return RD_OK;
 }
 
 int REDirect::rd_camera_up(const float up[3])
 {
-	return 0;
+	return RD_OK;
 }
-
+/*
 int REDirect::rd_camera_fov(float fov)
 {
 	return 0;
@@ -94,8 +115,8 @@ int REDirect::rd_clipping(float znear, float zfar)
 	return 0;
 }
  
- /**********************   Transformations **********************************/
-
+ /s**********************   Transformations **********************************/
+/*
 int REDirect::rd_translate(const float offset[3])
 {
 	return 0;
@@ -136,27 +157,8 @@ int REDirect::rd_xform_pop(void)
 	return 0;
 }
 
-  /**********************   Geometric Objects  *******************************/
-
-int REDirect::rd_line(const float start[3], const float end[3])
-{
-	return 0;
-}
-
-int REDirect::rd_point(const float p[3])
-{
-	float pigment[3];
-	pigment[0] = active.r_scale;
-	pigment[1] = active.g_scale;
-	pigment[2] = active.b_scale;
-	rd_write_pixel(p[0], p[1], pigment);
-	return 0;
-}
-
-int REDirect::rd_circle(const float center[3], float radius)
-{
-	return 0;
-}
+  /i**********************   Geometric Objects  *******************************/
+/*
 
 int REDirect::rd_bezier_curve(const string & vertex_type, int degree, const float * vertex)
 {
@@ -172,6 +174,18 @@ int REDirect::rd_catmull_clark_sds(const string & vertex_type, float * coord, in
 {
 	return 0;
 }
+int REDirect::rd_circle(const float center[3], float radius)
+{
+	return 0;
+}
+
+*/
+int REDirect::rd_line(const float start[3], const float end[3])
+{
+	cout << "in line" << endl;
+	return RD_OK;
+}
+/*
 
 
 int REDirect::rd_lineset(const string & vertex_type, int nvertex, const float * vertex, int nseg, const int * seg)
@@ -180,6 +194,22 @@ int REDirect::rd_lineset(const string & vertex_type, int nvertex, const float * 
 }
 
 
+*/   
+   
+   int REDirect::rd_point(const float p[3])
+{
+cout << "in point" << endl;
+	int x = p[0];
+	int y = p[1];
+	float pigment[3];
+	pigment[0] = active.r_scale;
+	pigment[1] = active.g_scale;
+	pigment[2] = active.b_scale;
+
+	rd_write_pixel(x, y, pigment);
+	return RD_OK;
+}
+/*
 int REDirect::rd_pointset(const string & vertex_type, int nvertex, const float * vertex)
 {
 	return 0;
@@ -245,10 +275,12 @@ int REDirect::rd_tube(const float start[3], const float end[3], float radius)
 	return 0;
 }
 
-/********************  Lighting & Shading  ***************************/
+/i********************  Lighting & Shading  ***************************/
+
 int REDirect::rd_background(const float color[])
 {
 
+cout << "rd_background" << endl;
 	//probably do not need all this as background and active are already set on frame init
 	//to black and white
 	float default_c[] = {0,0,0};
@@ -258,11 +290,12 @@ int REDirect::rd_background(const float color[])
 	else
 		rd_set_background(default_c);
 
-	return 0;
+	return RD_OK;
 }
    // red, green, blue by default
 int REDirect::rd_color(const float color[])
-{	
+{
+cout << "rd_color" << endl;
 	float default_c[] = {1,1,1};
 	if (color == default_c){
 		active.r_scale = 1; 
@@ -278,9 +311,9 @@ int REDirect::rd_color(const float color[])
 	       	active = color_convert(active);
 
 
-	return 0;
+	return RD_OK;
 }
-
+/*
 int REDirect::rd_opacity(float opacity)
 {
 	return 0;
@@ -358,7 +391,7 @@ int REDirect::rd_attribute_pop(void)
 }
 
  /****************************   Mapping ******************************/
-
+/*
 int REDirect::rd_map_border(const string & map_type, const string & horizontal, const string & vertical)
 {
 	return 0;
@@ -384,8 +417,8 @@ int REDirect::rd_map(const string & map_type, const string & label)
 	return 0;
 }
 
- /****************************  Options  **********************************/
-
+ /i****************************  Options  **********************************/
+/*
 int REDirect::rd_option_array(const string & name, int n, const float *values)
 {
 	return 0;
@@ -418,7 +451,7 @@ int REDirect::rd_custom(const string & label)
 
  REDirect::~REDirect(){}
 
-/*/ Some useful helper functions
+ Some useful helper functions
  int get_vertex_size(const string & vertex_type)
 {
 	return 0;

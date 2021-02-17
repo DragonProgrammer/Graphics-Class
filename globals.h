@@ -3,13 +3,16 @@
 #include "frame.h"
 //#include "rd_display.h"
 #include <vector>
-#include "color.cpp"
+#include "color.h"
 using std::vector;
 
 extern Frame current;
 extern vector<Frame> images;
-extern int current_id;
+
+extern int current_id;  // stores curutent frame id
+
 extern vector<int> frame_ids;
+
 extern color background;
 extern color active;
 extern void set_active(float color[3]);
