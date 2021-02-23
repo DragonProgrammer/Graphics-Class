@@ -46,10 +46,10 @@ int get_next_id(){
 void set_pixel(int x, int y){
 //		cout << "set_pixel" << endl;
 //	cout << to_string(x) + " " + to_string(y) << endl;
-	cout << current.frame_image[x][y] << endl;
+//	cout << current.frame_image[x][y] << endl;
 	current.frame_image[x][y]=active;
-	cout << "end set_pixel" << endl;
-	cout << current.frame_image[x][y] << endl;
+//	cout << "end set_pixel" << endl;
+//	cout << current.frame_image[x][y] << endl;
 }
 
 

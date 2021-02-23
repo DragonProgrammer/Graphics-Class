@@ -183,26 +183,22 @@ int REDirect::rd_circle(const float center[3], float radius)
 int REDirect::rd_line(const float start[3], const float end[3])
 {
 	int x1 = start[0], x2 =end[0];
-	int y1 = start[1], y2 =end[1];
+	int y1 = start[0], y2 =end[0];
 	int x0 = x1, y0 = y1;
-	int xchan = x2-x1, ychan = y2-y1;
+	int xchan = x1-x2, ychan = y1-y2;
 	if( xchan < 0){
 	x2 = start[0]; 
 	x1 =end[0];
 	y2 = start[1];
        	y1 =end[1];
 	
-	xchan = x2-x1; 
-	ychan = y2-y1;
+	xchan = x1-x2; 
+	ychan = y1-y2;
 	}
 	
 	int p0 = 2*ychan - xchan;
-
 	int inc_plower = 2*ychan, inc_pupper = 2*ychan -2*xchan;
-//	cout << "x1 = " + to_string(x1) + " x2 = " + to_string(x2) + " xchan = " + to_string(xchan) << endl;
-//	cout << "y1 = " + to_string(y1) + " y2 = " + to_string(y2) + " ychan = " + to_string(ychan) << endl;
-//	cout << "p0 = " + to_string(p0) + " plower = " + to_string(inc_plower) + " pupper = " + to_string(inc_pupper) << endl;
-	while(x0 <= x2){
+        while(x0 <= x2){
 
 		float point[3] = {float(x0),float(y0), 0};
 		cout << to_string(point[0]) + " " + to_string(point[1]) << endl;

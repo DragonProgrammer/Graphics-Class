@@ -1,0 +1,22 @@
+Display "Line Test"  "PNM" "rgb"
+Format 640 480
+
+# Testing line drawing
+
+# The next three lines will be ignored by your renderer
+CameraEye 320 240 -240
+CameraAt  320 240 0
+CameraUp  0.0 -1.0 0.0
+
+FrameBegin 1
+WorldBegin
+
+# This line will also be ignored by your renderer
+#Translate 0.5 0.5 0.0
+
+
+Line 20 10 0  30 18 0
+Line 0 0 0  20 20 0
+
+WorldEnd
+FrameEnd

@@ -26,7 +26,7 @@ int pnm_end_display(void){
 		 }
 
  int pnm_init_frame(int){
-	cout << "pnm_nit_frame \n";
+//	cout << "pnm_nit_frame \n";
 //	current.frame_image.clear();
 	 return RD_OK;
 	 }
@@ -74,14 +74,14 @@ int pnm_end_display(void){
 	 }
 
  int pnm_set_background(const float rgb []){
-	cout << "set_background \n";
+//	cout << "set_background \n";
 	 background.r= int(rgb[0]*255);
 	 background.g= int(rgb[1]*255);
 	 background.b= int(rgb[2]*255);
-	 return 0;
+	 return RD_OK;
 	 }
 
  int pnm_clear(void){
-	 return 0;
+	 return RD_OK;
 	 }
 
