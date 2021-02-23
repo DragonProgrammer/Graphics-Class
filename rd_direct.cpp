@@ -5,6 +5,7 @@
 #include "globals.h"
 #include "rd_error.h"
 #include <iostream>
+#include <vector>
 using std::string;
 using std::to_string;
 using std::cout;
@@ -174,12 +175,93 @@ int REDirect::rd_catmull_clark_sds(const string & vertex_type, float * coord, in
 {
 	return 0;
 }
+*/
+
 int REDirect::rd_circle(const float center[3], float radius)
 {
+struct point {
+	float x;
+	float y;
+	float z;
+};
+
+	float xcenter = center[0], ycenter = center[1], r = radius;
+	int p = 1 - r;
+	float x = 0 + xcenter, y= r + ycenter;
+	float codinate[3] = {x,y, 0};
+	vector<point> circle;
+	while(x <= r + xcenter){
+		point spot;
+		spot.z = 0;
+		
+//		cout << "section 1" << endl;
+		spot.x = x;
+		spot.y = y;
+//		cout << to_string(spot.x) + " " + to_string(spot.y) << endl;
+		circle.push_back(spot);
+
+		
+//		cout << "section 2" << endl;
+		spot.x = -x;
+		spot.y = y;
+	//	cout << to_string(spot.x) + " " + to_string(spot.y) << endl;
+		circle.push_back(spot);
+
+//		cout << "section 3" << endl;
+		spot.x = x;
+		spot.y = -y;
+	//	cout << to_string(spot.x) + " " + to_string(spot.y) << endl;
+		circle.push_back(spot);
+
+//		cout << "section 4" << endl;
+		spot.x = -x;
+		spot.y = -y;
+	//	cout << to_string(spot.x) + " " + to_string(spot.y) << endl;
+		circle.push_back(spot);
+
+//		cout << "section 5" << endl;
+		spot.x = y;
+		spot.y = x;
+	//	cout << to_string(spot.x) + " " + to_string(spot.y) << endl;
+		circle.push_back(spot);
+
+//		cout << "section 6" << endl;
+		spot.x = -y;
+		spot.y = x;
+	//	cout << to_string(spot.x) + " " + to_string(spot.y) << endl;
+		circle.push_back(spot);
+
+//		cout << "section 7" << endl;
+		spot.x = y;
+		spot.y = -x;
+	//	cout << to_string(spot.x) + " " + to_string(spot.y) << endl;
+		circle.push_back(spot);
+
+//		cout << "section 8" << endl;
+		spot.x = -y;
+		spot.y = -x;
+	//	cout << to_string(spot.x) + " " + to_string(spot.y) << endl;
+		circle.push_back(spot);
+
+		x++;
+		if(p < 0)
+			p += 2*x +1;
+		else{
+			p += 2*x-2*y +3;
+			y--;
+		}
+	}
+	for( auto a : circle)
+		if( a.x >= 0 &&  a.y >= 0){
+			float cord[3] = {a.x, a.y, a.z};
+			rd_point(cord);
+	//		cout << a.x << endl;			
+		}
+
 	return 0;
 }
 
-*/
+
 int REDirect::rd_line(const float start[3], const float end[3])
 {
 	int x1 = start[0], x2 =end[0];
@@ -205,7 +287,7 @@ int REDirect::rd_line(const float start[3], const float end[3])
 	while(x0 <= x2){
 
 		float point[3] = {float(x0),float(y0), 0};
-		cout << to_string(point[0]) + " " + to_string(point[1]) << endl;
+	//	cout << to_string(point[0]) + " " + to_string(point[1]) << endl;
 		rd_point(point);
 		x0++;
 		if( p0 < 0)
@@ -215,7 +297,7 @@ int REDirect::rd_line(const float start[3], const float end[3])
 			p0 += inc_pupper;
 		}
 	}	
-	cout << "in line" << endl;
+//	cout << "in line" << endl;
 	return RD_OK;
 }
 /*
@@ -231,7 +313,7 @@ int REDirect::rd_lineset(const string & vertex_type, int nvertex, const float * 
    
    int REDirect::rd_point(const float p[3])
 {
-cout << "in point" << endl;
+//cout << "in point" << endl;
 	int x = p[0];
 	int y = p[1];
 	float pigment[3];

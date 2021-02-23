@@ -15,8 +15,7 @@ WorldBegin
 #Translate 0.5 0.5 0.0
 
 
-Line 20 10 0  30 18 0
-Line 0 0 0  20 20 0
+Circle 0 0 0 10
 
 WorldEnd
 FrameEnd

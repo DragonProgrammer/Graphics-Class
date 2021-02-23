@@ -66,9 +66,9 @@ int rd_bezier_patch(const string & vertex_type, int u_degree, int v_degree, cons
 
 int rd_catmull_clark_sds(const string & vertex_type, float * coord, int nvertex, int * vertex_list, int nface, int * crease_list, int ncrease, float *sharpness);
 
-
-int rd_circle(const float center[3], float radius);
 */
+int rd_circle(const float center[3], float radius);
+
 int rd_line(const float start[3], const float end[3]);
 
 //int rd_lineset(const string & vertex_type, int nvertex, const float * vertex, int nseg, const int * seg);
