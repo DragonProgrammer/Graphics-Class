@@ -1,21 +1,26 @@
-Display "Line Test"  "PNM" "rgb"
-Format 640 480
+Display "Fill Test"  "PNM" "rgb"
+Format  10 10 
 
-# Testing line drawing
+# Testing filling
 
 # The next three lines will be ignored by your renderer
-CameraEye 320 240 -240
-CameraAt  320 240 0
+CameraEye 200 200 -200
+CameraAt  200 200 0
 CameraUp  0.0 -1.0 0.0
 
 FrameBegin 1
+
 WorldBegin
 
-# This line will also be ignored by your renderer
-#Translate 0.5 0.5 0.0
+# Draw some squares
 
 
-Circle 0 0 0 10
+
+Color 1.0  0.5 0.5
+
+Fill 1 1 0
+
 
 WorldEnd
 FrameEnd
+

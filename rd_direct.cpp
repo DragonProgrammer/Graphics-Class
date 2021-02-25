@@ -411,20 +411,14 @@ cout << "rd_background" << endl;
 int REDirect::rd_color(const float color[])
 {
 cout << "rd_color" << endl;
-	float default_c[] = {1,1,1};
-	if (color == default_c){
-		active.r_scale = 1; 
-		active.g_scale = 1; 
-		active.b_scale = 1;
-	}
-	else
-	{
+//default is already set up in initialization
 		active.r_scale = color[0]; 
 		active.g_scale = color[1]; 
 		active.b_scale = color[2];
-	}
-	       	active = color_convert(active);
 
+		//	}
+	       	active = color_convert(active);
+ cout << active << endl;
 
 	return RD_OK;
 }
@@ -438,12 +432,18 @@ int REDirect::rd_emission(const float color[], float intensity)
 {
 	return 0;
 }
-
+*/
 int REDirect::rd_fill(const float seed_point[3])
 {
+	int xs = seed_point[0], y = seed_point[1], xe;
+	cout << "in fill" << endl;
+	set_match(seed_point);
+	flood_fill(xs, xs+1, y);	
+
+
 	return 0;
 }
-
+/*
 int REDirect::rd_surface(const string & shader_type)
 {
 	return 0;

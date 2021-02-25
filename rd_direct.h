@@ -111,9 +111,9 @@ int rd_color(const float color[]);
 int rd_opacity(float opacity);
 
 int rd_emission(const float color[], float intensity);
-
+*/
 int rd_fill(const float seed_point[3]);
-
+/*
 int rd_surface(const string & shader_type);
 
 int rd_cone_light(const float pos[3], const float at[3], float theta_min, float theta_max, const float color[], float intensity);
