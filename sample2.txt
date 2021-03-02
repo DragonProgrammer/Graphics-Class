@@ -1,9 +1,8 @@
 Display "Oh No!"  "Screen" "rgbsingle"
-Format 500 500 
+Format 550 500 
 
 # Testing filling and double buffering
 
-Background 0.3 0.3 0.7
 
 # The next three lines will be ignored by your renderer
 CameraEye 250 250 -250
@@ -14,7 +13,7 @@ FrameBegin 1
 
 WorldBegin
 
-Line 0 0 0 500 500 0 
+Fill 0 0 0 
 
 WorldEnd
 FrameEnd

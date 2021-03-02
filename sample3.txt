@@ -18,7 +18,7 @@ WorldBegin
 
 # x y z of center, then radius
 
-Circle 50 50 0 10
+Circle 50 50 0 5
 
 #Circle 250 150 0 40
 

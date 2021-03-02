@@ -16,6 +16,9 @@ extern vector<int> frame_ids;
 extern color background;
 extern color active;
 extern color match;
+extern int back_flag;
+extern int active_flag;
+
 
 extern void set_active(float color[3]);
 extern void set_back(float color[3]);

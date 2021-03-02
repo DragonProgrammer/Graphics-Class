@@ -1,3 +1,13 @@
+#define DEBUG
+#ifdef DEBUG
+#include <iostream>
+using std::cerr;
+using std::end;
+#define DB(x) do{cerr<<x<<endl;}while(0)
+#else
+#define DB(x) do{}while(0)
+#endif
+
 #include "rd_direct.h"
 #include <string>
 #include "rd_display.h"
@@ -47,21 +57,20 @@ cout << "world begin" << endl;
 
 int REDirect::rd_world_end(void)
 {
-cout << "rd_world_end" << endl;	
+DB("rd_world_end");	
 //	images.push_back(current);
 //	frame_ids.push_back(current_id);
 	rd_disp_end_display();
-cout << to_string(current_id) + " " + to_string(current.get_id())<< endl; 
+//cout << to_string(current_id) + " " + to_string(current.get_id())<< endl; 
 	//i	rd_disp_end_frame();
 	
-cout << "end rd_world_end" << endl;	
+	DB("end rd_world_end");	
 	return RD_OK;
 }
 
 int REDirect::rd_frame_begin(int frame_no)
 {
-    XInitThreads(); // to try and get rid of eror from xcb	
-	cout << "rd_frame_begin"  << endl;
+	DB("rd_frame_begin");
 	//this should change nothing
 //	if(current_id != frame_no){
 //		return-1;}
@@ -73,7 +82,7 @@ int REDirect::rd_frame_begin(int frame_no)
 
 int REDirect::rd_frame_end(void)
 {
-cout << "rd_frame_end" << endl;	
+DB("rd_frame_end");	
 
 //	if(current_id != frame_ids.back()){
 //		cout << "in check" <<endl;
@@ -195,15 +204,17 @@ struct point {
 	int p = 1 - r;
 	float x = 0 , y= r;
 	float codinate[3] = {x,y, 0};
-	cout << "center " + to_string(xcenter) + " " + to_string(ycenter) << endl;
+	
+//	DB("center " + to_string(xcenter) + " " + to_string(ycenter));
 	vector<point> circle;
-	while(x <= r + xcenter){
+	while(x <= r){
+		if(2*x*x < r*r){
 		point spot;
 		spot.point_z = 0;
 		
 		spot.point_x = xcenter+x;
 		spot.point_y = ycenter+y;
-	//	cout << "section 1 " << to_string(spot.point_x) + " " + to_string(spot.point_y) << endl;
+//		DB("section 1 " << to_string(spot.point_x) + " " + to_string(spot.point_y));
 		circle.push_back(spot);
 
 		
@@ -241,7 +252,7 @@ struct point {
 		spot.point_y = ycenter-x;
 //		cout << "section 8 " << to_string(spot.x) + " " + to_string(spot.y) << endl << endl;
 		circle.push_back(spot);
-
+		}
 		x++;
 		if(p < 0)
 			p += 2*x +1;
@@ -253,9 +264,8 @@ struct point {
 	for( auto a : circle)
 		if( a.point_x >= 0 &&  a.point_y >= 0){
 			float cord[3] = {a.point_x, a.point_y, a.point_z};
-	//		cout << to_string(a.point_x) + " " + to_string(a.point_y) << endl;
+	//	cout << to_string(a.point_x) + " " + to_string(a.point_y) << endl;
 			rd_point(cord);
-	//		cout << a.x << endl;			
 		}
 
 	return 0;
@@ -281,9 +291,9 @@ int REDirect::rd_line(const float start[3], const float end[3])
 	int p0 = 2*ychan - xchan;
 
 	int inc_plower = 2*ychan, inc_pupper = 2*ychan -2*xchan;
-//	cout << "x1 = " + to_string(x1) + " x2 = " + to_string(x2) + " xchan = " + to_string(xchan) << endl;
-//	cout << "y1 = " + to_string(y1) + " y2 = " + to_string(y2) + " ychan = " + to_string(ychan) << endl;
-//	cout << "p0 = " + to_string(p0) + " plower = " + to_string(inc_plower) + " pupper = " + to_string(inc_pupper) << endl;
+//	DB("x1 = " + to_string(x1) + " x2 = " + to_string(x2) + " xchan = " + to_string(xchan));
+//	DB("y1 = " + to_string(y1) + " y2 = " + to_string(y2) + " ychan = " + to_string(ychan));
+//	DB("p0 = " + to_string(p0) + " plower = " + to_string(inc_plower) + " pupper = " + to_string(inc_pupper));
 	while(x0 <= x2){
 
 		float point[3] = {float(x0),float(y0), 0};
@@ -395,18 +405,19 @@ int REDirect::rd_tube(const float start[3], const float end[3], float radius)
 int REDirect::rd_background(const float color[])
 {
 
-cout << "rd_background" << endl;
-	//probably do not need all this as background and active are already set on frame init
-	//to black and white
+//DB("rd_background");
+	//probably do not need all this as background and active are already set on frame init to black and white
 //	float default_c[] = {0,0,0};
 //	if( color != default_c){
 //cout << "ine if" << endl;
-	float color_to_pass[3];
-	color_to_pass[0] = 0;
-	color_to_pass[1] = 0;
-	color_to_pass[2] = 0;
-	rd_set_background(color_to_pass);
-//	}
+	float color_c[3];
+	color_c[0] = color[0];
+	color_c[1] = color[1];
+	color_c[2] = color[2];
+	rd_set_background(color_c);
+	back_flag = 1;
+	set_back(color_c);
+	//	}
 //	else{
 //cout << "in else" << endl;
 //		rd_set_background(default_c);
