@@ -6,6 +6,7 @@
 #include "rd_error.h"
 #include <iostream>
 #include <vector>
+#include<X11/Xlib.h>
 using std::string;
 using std::to_string;
 using std::cout;
@@ -24,7 +25,7 @@ int REDirect::rd_format(int xresolution, int yresolution)
 
 int REDirect::rd_world_begin(void)
 {
-
+cout << "world begin" << endl;
 //	if(current_id != -1){   //if there is a frame alredy
 //		images.push_back(current); //put it into the vector if frames
 //	}
@@ -36,6 +37,7 @@ int REDirect::rd_world_begin(void)
 	if(rd_er != 0){
 	cout << rd_er << endl;
 	}
+	
 	//this presumes that rd_format (above) was called to give us size
 //	rd_frame_begin(1); // called from below
 
@@ -46,16 +48,20 @@ int REDirect::rd_world_begin(void)
 int REDirect::rd_world_end(void)
 {
 cout << "rd_world_end" << endl;	
-	images.push_back(current);
-	frame_ids.push_back(current_id);
+//	images.push_back(current);
+//	frame_ids.push_back(current_id);
 	rd_disp_end_display();
+cout << to_string(current_id) + " " + to_string(current.get_id())<< endl; 
+	//i	rd_disp_end_frame();
+	
+cout << "end rd_world_end" << endl;	
 	return RD_OK;
 }
 
 int REDirect::rd_frame_begin(int frame_no)
 {
-	
-//	cout << "rd_frame_begin"  << endl;
+    XInitThreads(); // to try and get rid of eror from xcb	
+	cout << "rd_frame_begin"  << endl;
 	//this should change nothing
 //	if(current_id != frame_no){
 //		return-1;}
@@ -180,67 +186,60 @@ int REDirect::rd_catmull_clark_sds(const string & vertex_type, float * coord, in
 int REDirect::rd_circle(const float center[3], float radius)
 {
 struct point {
-	float x;
-	float y;
-	float z;
+	float point_x;
+	float point_y;
+	float point_z;
 };
 
 	float xcenter = center[0], ycenter = center[1], r = radius;
 	int p = 1 - r;
-	float x = 0 + xcenter, y= r + ycenter;
+	float x = 0 , y= r;
 	float codinate[3] = {x,y, 0};
+	cout << "center " + to_string(xcenter) + " " + to_string(ycenter) << endl;
 	vector<point> circle;
 	while(x <= r + xcenter){
 		point spot;
-		spot.z = 0;
+		spot.point_z = 0;
 		
-//		cout << "section 1" << endl;
-		spot.x = x;
-		spot.y = y;
-//		cout << to_string(spot.x) + " " + to_string(spot.y) << endl;
+		spot.point_x = xcenter+x;
+		spot.point_y = ycenter+y;
+	//	cout << "section 1 " << to_string(spot.point_x) + " " + to_string(spot.point_y) << endl;
 		circle.push_back(spot);
 
 		
-//		cout << "section 2" << endl;
-		spot.x = -x;
-		spot.y = y;
-	//	cout << to_string(spot.x) + " " + to_string(spot.y) << endl;
+		spot.point_x = xcenter-x;
+		spot.point_y = ycenter+y;
+//		cout << "section 2 " << to_string(spot.x) + " " + to_string(spot.y) << endl;
 		circle.push_back(spot);
 
-//		cout << "section 3" << endl;
-		spot.x = x;
-		spot.y = -y;
-	//	cout << to_string(spot.x) + " " + to_string(spot.y) << endl;
+		spot.point_x = xcenter+x;
+		spot.point_y = ycenter-y;
+//		cout << "section 3 " << to_string(spot.x) + " " + to_string(spot.y) << endl;
 		circle.push_back(spot);
 
-//		cout << "section 4" << endl;
-		spot.x = -x;
-		spot.y = -y;
-	//	cout << to_string(spot.x) + " " + to_string(spot.y) << endl;
+		spot.point_x = xcenter-x;
+		spot.point_y = ycenter-y;
+//		cout << "section 4 " << to_string(spot.x) + " " + to_string(spot.y) << endl;
 		circle.push_back(spot);
 
-//		cout << "section 5" << endl;
-		spot.x = y;
-		spot.y = x;
-	//	cout << to_string(spot.x) + " " + to_string(spot.y) << endl;
+		spot.point_x = xcenter+y;
+		spot.point_y = ycenter+x;
+//		cout << "section 5 " << to_string(spot.x) + " " + to_string(spot.y) << endl;
 		circle.push_back(spot);
 
-//		cout << "section 6" << endl;
-		spot.x = -y;
-		spot.y = x;
-	//	cout << to_string(spot.x) + " " + to_string(spot.y) << endl;
+		spot.point_x = xcenter-y;
+		spot.point_y = ycenter+x;
+//		cout << "section 6 " << to_string(spot.x) + " " + to_string(spot.y) << endl;
 		circle.push_back(spot);
 
-//		cout << "section 7" << endl;
-		spot.x = y;
-		spot.y = -x;
-	//	cout << to_string(spot.x) + " " + to_string(spot.y) << endl;
+		spot.point_x = xcenter+y;
+		spot.point_y = ycenter-x;
+//		cout << "section 7 " << to_string(spot.x) + " " + to_string(spot.y) << endl;
 		circle.push_back(spot);
 
-//		cout << "section 8" << endl;
-		spot.x = -y;
-		spot.y = -x;
-	//	cout << to_string(spot.x) + " " + to_string(spot.y) << endl;
+		spot.point_x = xcenter-y;
+		spot.point_y = ycenter-x;
+//		cout << "section 8 " << to_string(spot.x) + " " + to_string(spot.y) << endl << endl;
 		circle.push_back(spot);
 
 		x++;
@@ -252,8 +251,9 @@ struct point {
 		}
 	}
 	for( auto a : circle)
-		if( a.x >= 0 &&  a.y >= 0){
-			float cord[3] = {a.x, a.y, a.z};
+		if( a.point_x >= 0 &&  a.point_y >= 0){
+			float cord[3] = {a.point_x, a.point_y, a.point_z};
+	//		cout << to_string(a.point_x) + " " + to_string(a.point_y) << endl;
 			rd_point(cord);
 	//		cout << a.x << endl;			
 		}
@@ -398,19 +398,26 @@ int REDirect::rd_background(const float color[])
 cout << "rd_background" << endl;
 	//probably do not need all this as background and active are already set on frame init
 	//to black and white
-	float default_c[] = {0,0,0};
-	if( color != default_c){
-	rd_set_background(color);
-	}
-	else
-		rd_set_background(default_c);
-
+//	float default_c[] = {0,0,0};
+//	if( color != default_c){
+//cout << "ine if" << endl;
+	float color_to_pass[3];
+	color_to_pass[0] = 0;
+	color_to_pass[1] = 0;
+	color_to_pass[2] = 0;
+	rd_set_background(color_to_pass);
+//	}
+//	else{
+//cout << "in else" << endl;
+//		rd_set_background(default_c);
+//	}
+cout << "end rd_background" << endl;
 	return RD_OK;
 }
    // red, green, blue by default
 int REDirect::rd_color(const float color[])
 {
-cout << "rd_color" << endl;
+//cout << "rd_color" << endl;
 //default is already set up in initialization
 		active.r_scale = color[0]; 
 		active.g_scale = color[1]; 
@@ -418,7 +425,7 @@ cout << "rd_color" << endl;
 
 		//	}
 	       	active = color_convert(active);
- cout << active << endl;
+ //iout << active << endl;
 
 	return RD_OK;
 }

@@ -9,8 +9,8 @@ using std::to_string;
 using std::vector;
 int current_id = -1;
 Frame current = Frame(background);
-vector<Frame> images;
-vector<int> frame_ids;
+//vector<Frame> images;
+//vector<int> frame_ids;
 color background;
 color active;
 color match;
@@ -31,7 +31,7 @@ void set_back(float color[3]){
 	background.b_scale = color[2];
 	background = color_convert(background);
 }
-
+/*
 int get_next_id(){
 		if(frame_ids.size() == 0){
 			return 0; //return 0 if there is curently no ids
@@ -43,7 +43,7 @@ int get_next_id(){
 			return last_id; //curently this should always be 1 
 	}
 	}
-
+*/
 void set_pixel(int x, int y){
 //		cout << "set_pixel" << endl;
 //	cout << to_string(x) + " " + to_string(y) << endl;
@@ -77,7 +77,7 @@ Frame set_frame(int id){
 //	cout << to_string(display_xSize) + " " + to_string(display_ySize) << endl;
 	temp.frame_image = xline;
 	temp.set_id(id);
-		frame_ids.push_back(id);
+//		frame_ids.push_back(id);
 		current_id = id;
 
 //	cout << temp.frame_image[0][0] << endl;
@@ -121,10 +121,10 @@ int check_color(float point[3]){
 return -1;
 }
 
-int find_span(float &new_xs, float &new_xe, float y){
+int find_span(int &new_xs, int &new_xe, float y){
 //cout << "in span" <<endl;	
 	int left = 1, right = 1;  //to tell mei if i need to move forward or backward
-	float point[3] = {new_xs, y, 0};
+	float point[3] = {float(new_xs), y, 0};
 	if(check_color(point) < 0){
 //		cout << "done this one already" << endl;
 		return -1;
@@ -150,7 +150,7 @@ int find_span(float &new_xs, float &new_xe, float y){
 		}
 		else{
 		
-		//	cout << endl << "left Z" << endl;
+			//cout << endl << "left Z" << endl;
 			right = 0;}
 	}
 return 0;
@@ -159,30 +159,38 @@ return 0;
 
 int flood_fill(float xs, float xe, float y){
 	float color[3] = {active.r_scale, active.g_scale, active.b_scale};
-	float new_xs, new_xe;
+	int new_xs, new_xe;
 //	cout << endl << "in flood " + to_string(xs) + " " + to_string(xe) << endl;
+//	cout << endl << "in flood " + to_string(display_xSize) + " " + to_string(display_xSize) << endl;
+//	cout << " initial        "+  to_string(xs) + " " + to_string(xe)  + " " + to_string(y)<< endl;
 	for( int x = xs; x < xe; x++){
-//		cout << to_string(x) + " " + to_string(xe) << endl;
+//		cout << to_string(x) + " " + to_string(y) << endl;
 		rd_write_pixel( x , y, color);}
 	for( new_xs= new_xe =xs; new_xe < xe; new_xs = new_xe){
-		if(y+1 < display_ySize && find_span(new_xs, new_xe, y+1) == 0){
-//			cout << "next flood fill" << endl;
-			flood_fill(new_xs, new_xe, y+1);
+//	cout << "For 1: "+  to_string(new_xs) +" "+ to_string(new_xe)  +" "+ to_string(xe) +" "+ to_string(y)<< endl;
+		if(y+1 <= display_ySize && find_span(new_xs, new_xe, y+1) == 0){
+//		cout << "Down "+  to_string(new_xs) + " " + to_string(new_xe)  + " " + to_string(y)<< endl;
+			flood_fill(new_xs, new_xe+1, y+1);
+			new_xe++;
 		}
 		else{
 			new_xe++;
-	}
+//		cout << "Down ncrement "+  to_string(new_xs) + " " + to_string(new_xe)  + " " + to_string(y)<< endl;
+		}
 
-}
+	}
+//	cout << " Transition "+  to_string(new_xs) + " " + to_string(new_xe)  + " " + to_string(y)<< endl;
 	for( new_xs= new_xe =xs; new_xe < xe; new_xs = new_xe){
-		if(y-1 > -1 && find_span(new_xs, new_xe, y-1) == 0){
-//			cout << "next flood fill" << endl;
-			flood_fill(new_xs, new_xe, y-1);
+//	cout << "For 2: "+  to_string(new_xs) +" "+ to_string(new_xe)  +" "+ to_string(xe) +" "+ to_string(y)<< endl;
+		if(y-1 >= 0 && find_span(new_xs, new_xe, y-1) == 0){
+//		cout << " Up "+  to_string(new_xs) + " " + to_string(new_xe)  + " " + to_string(y)<< endl;
+			flood_fill(new_xs, new_xe+1, y-1);
+			new_xe++;
 		}
 		else{
 			new_xe++;
-	//		cout << endl << "1" << endl;
-	}
+//		cout << "up ncrement "+  to_string(new_xs) + " " + to_string(new_xe)  + " " + to_string(y)<< endl;
+		}
 	}
 	return 0;
 }

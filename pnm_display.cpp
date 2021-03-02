@@ -19,8 +19,8 @@ int pnm_init_display(void){
 
 int pnm_end_display(void){
 //	cout << "pnm_end_display \n";
-	images.clear(); // clear images vector
-	frame_ids.clear();	
+//	images.clear(); // clear images vector
+//	frame_ids.clear();	
 //	current.frame_image.clear();
 	return RD_OK;
 		 }
