@@ -16,7 +16,6 @@ using std::end;
 #include "rd_error.h"
 #include <iostream>
 #include <vector>
-#include<X11/Xlib.h>
 using std::string;
 using std::to_string;
 using std::cout;
@@ -58,13 +57,14 @@ cout << "world begin" << endl;
 int REDirect::rd_world_end(void)
 {
 DB("rd_world_end");	
-//	images.push_back(current);
-//	frame_ids.push_back(current_id);
-	rd_disp_end_display();
-//cout << to_string(current_id) + " " + to_string(current.get_id())<< endl; 
-	//i	rd_disp_end_frame();
+//	int error1 = rd_disp_end_display();
+//	DB(error1);
+	int error = rd_frame_end();
+//	DB(error);
+
 	
 	DB("end rd_world_end");	
+//	exit(0);
 	return RD_OK;
 }
 
@@ -76,7 +76,7 @@ int REDirect::rd_frame_begin(int frame_no)
 //		return-1;}
 	current = set_frame(frame_no); //create a new frame in the globals
 	current.set_id(frame_no);
-	
+		
 	return RD_OK;
 }
 
@@ -89,6 +89,7 @@ DB("rd_frame_end");
 //	images.push_back(current);
 //	frame_ids.push_back(current_id);
 //	}
+//	rd_disp_end_display();
 	rd_disp_end_frame();
 
 	return RD_OK;
@@ -291,19 +292,21 @@ int REDirect::rd_line(const float start[3], const float end[3])
 	int p0 = 2*ychan - xchan;
 
 	int inc_plower = 2*ychan, inc_pupper = 2*ychan -2*xchan;
-//	DB("x1 = " + to_string(x1) + " x2 = " + to_string(x2) + " xchan = " + to_string(xchan));
-//	DB("y1 = " + to_string(y1) + " y2 = " + to_string(y2) + " ychan = " + to_string(ychan));
+	DB("x1 = " + to_string(x1) + " x2 = " + to_string(x2) + " xchan = " + to_string(xchan));
+	DB("y1 = " + to_string(y1) + " y2 = " + to_string(y2) + " ychan = " + to_string(ychan));
 //	DB("p0 = " + to_string(p0) + " plower = " + to_string(inc_plower) + " pupper = " + to_string(inc_pupper));
 	while(x0 <= x2){
 
 		float point[3] = {float(x0),float(y0), 0};
-	//	cout << to_string(point[0]) + " " + to_string(point[1]) << endl;
 		rd_point(point);
 		x0++;
 		if( p0 < 0)
 			p0 += inc_plower;
 		else{
-			y0++;
+			if(ychan<0)
+				y0--;
+			else
+				y0++;
 			p0 += inc_pupper;
 		}
 	}	
@@ -323,14 +326,14 @@ int REDirect::rd_lineset(const string & vertex_type, int nvertex, const float * 
    
    int REDirect::rd_point(const float p[3])
 {
-//cout << "in point" << endl;
+//DB( "in point");
 	int x = p[0];
 	int y = p[1];
 	float pigment[3];
 	pigment[0] = active.r_scale;
 	pigment[1] = active.g_scale;
 	pigment[2] = active.b_scale;
-
+	set_pixel(x, y);
 	rd_write_pixel(x, y, pigment);
 	return RD_OK;
 }
@@ -417,10 +420,6 @@ int REDirect::rd_background(const float color[])
 	rd_set_background(color_c);
 	back_flag = 1;
 	set_back(color_c);
-	//	}
-//	else{
-//cout << "in else" << endl;
-//		rd_set_background(default_c);
 //	}
 cout << "end rd_background" << endl;
 	return RD_OK;
@@ -453,12 +452,15 @@ int REDirect::rd_emission(const float color[], float intensity)
 */
 int REDirect::rd_fill(const float seed_point[3])
 {
-	int xs = seed_point[0], y = seed_point[1], xe;
-	cout << "in fill" << endl;
+	float xs = seed_point[0], y = seed_point[1], xe = xs;
+//	cout << "in fill" << endl;
 	set_match(seed_point);
-	flood_fill(xs, xs+1, y);	
-
-
+	flood_fill(xs, xe+1, y);
+	 for(int x = 0; x < display_xSize; x++){
+	                   for(int y = 0; y < display_ySize; y++){
+//				  DB("cell " + to_string(x) + " " + to_string(y) + "color " << current.frame_image[x][y]);
+			   }
+	 }		   
 	return 0;
 }
 /*
@@ -523,7 +525,7 @@ int REDirect::rd_attribute_pop(void)
 	return 0;
 }
 
- /****************************   Mapping ******************************/
+****************************   Mapping ******************************/
 /*
 int REDirect::rd_map_border(const string & map_type, const string & horizontal, const string & vertical)
 {
@@ -590,3 +592,44 @@ int REDirect::rd_custom(const string & label)
 	return 0;
 }
 // Returns the number of components in an attributed vertex type */
+//
+
+/*
+int REDirect::flood_fill(float xs, float xe, float y){	
+	float new_xs, new_xe;	
+	DB("in flood");
+        for( int x = xs; x < xe; x++){
+		DB( "fill :" +  to_string(x) + " " + to_string(y));
+		float point[3] = {x, y, 0.0};
+		rd_point(point);
+	}
+*
+	float y_down = y-1;
+        for( new_xs= new_xe =xs; new_xe < xe; new_xs = new_xe){
+		int span = find_span(new_xs, new_xe, y+1);
+	        DB(to_string(span));
+		
+	        if(y+1 <= display_ySize && span == 1){
+		        DB("DOWN");
+		        flood_fill(new_xs, new_xe+1, y+1);
+	                new_xe++;
+	                }
+	        else{
+		        new_xe++;
+		}
+	 }
+	int y_up = y-1;
+	for( new_xs= new_xe =xs; new_xe < xe; new_xs = new_xe){
+		if(y-1 >= 0 && find_span(new_xs, new_xe, y-1) < 0){
+			DB("UP");
+			flood_fill(new_xs, new_xe+1, y-1);
+			new_xe++;
+		}
+         else{
+	                 new_xe++;
+                 }
+          }
+
+	return 0;
+}
+*/

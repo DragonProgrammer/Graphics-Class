@@ -167,10 +167,12 @@ int rd_custom(const string & label);
 
 ~REDirect();
 */
+//int flood_fill(float xs, float xe, float y);
  };
 
 // Some useful helper functions
 //int get_vertex_size(const string & vertex_type);
 // Returns the number of components in an attributed vertex type
+
 
  #endif /* RD_BASE_ENGINE_H */

@@ -1,5 +1,5 @@
-Display "Oh No!"  "Screen" "rgbsingle"
-Format 550 500 
+Display "Oh No!"  "Screen" "rgbdouble"
+Format  1000 1000 
 
 # Testing filling and double buffering
 
@@ -13,7 +13,11 @@ FrameBegin 1
 
 WorldBegin
 
-Fill 0 0 0 
+Line 0 0 0 999 999 0
+Fill 5 2 0 
+Line 999 0 0 0 999 0
+
+Fill 50 950 0 
 
 WorldEnd
 FrameEnd
