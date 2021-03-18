@@ -1,0 +1,105 @@
+Display "Line_single" "Screen" "rgbsingle"
+
+Format 600 600
+
+FrameBegin 1
+WorldBegin
+
+#red brown
+Color 1 .5 .5    #set inner color
+Circle 300 300  0 10   #draw inner circle
+Fill 300 300 0   #filler inner cirle
+#Grey
+
+Color .5 .5 .5
+Circle 300 300 0 20  # draw circle 2
+Fill 315 300 0
+
+
+#teal
+#Color .5 1 1
+
+Color .75 .75 .75
+Circle 300 300  0 40
+
+Fill 330 300 0
+Color 1 .5 1 
+
+
+
+#purple blue
+#Color .5 .5 1
+
+#pink
+Color 1 .5 1   #set color 2
+Circle 300 300  0 60
+Fill 350 300 0
+
+
+#light green
+#Color .5 1 .5
+Color .8 0 0	
+Circle 300 300  0 80
+Fill 370 300 0
+
+
+#yellow
+#Color 1 1 .5
+Color  1 .5 0
+Circle 300 300  0 100
+Fill 390 300 0
+
+
+#yellow
+Color 1 1 .7    #set color 2
+Circle 300 300  0 121
+Fill 410 300 0
+
+Color  .1  1 .1
+Circle 300 300 0 141
+Fill  430 300 0 
+
+
+Color  .1  .1 1
+Circle 300 300 0 160
+Fill  450 300 0 
+
+
+Color  .7  0 .6
+Circle 300 300 0 180
+Fill  470 300 0 
+
+Color .1 .1 .1
+
+Circle 300 300 0 180
+Line 0 0 0 599 599 0
+Line 300 0 0 300 600 0
+Line 0 300 0 599 300 0
+Line 599 0 0 0 599 0 
+
+Color .5 .5 .5
+Fill 20 10 0
+Color  .1  .1 1
+Fill 580 10 0
+Color  .1  1 .1
+
+Fill 580  290 0
+Color 1 1 .7    #set color 2
+
+Fill 580 310 0
+Color  1 .5 0
+
+Fill 580 590 0
+
+Color .8 0 0	
+Fill 20 590 0
+Color 1 .5 1   #set color 2
+Fill 10 580 0
+
+Color .75 .75 .75
+Fill 10 20 0
+
+Color  .7  0 .6
+
+WorldEnd
+FrameEnd

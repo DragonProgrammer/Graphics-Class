@@ -1,0 +1,54 @@
+Display "Line_single" "Screen" "rgbsingle"
+
+Format 300 300
+
+FrameBegin 1
+WorldBegin
+
+# center - RM
+Line 150 150 0 299 150 0
+#pink
+Color 1 .5 1 
+
+# TM - center 
+Line  150 150 0 150 0 0
+#red brown
+Color 1 .5 .5
+#  center - RT
+Line 150 150 0 299 0 0
+
+#teal
+Color .5 1 1
+
+#center - RL
+Line 150 150 0 299 299 0
+
+#purple blue
+Color .5 .5 1
+
+#center - BM
+Line 150 150 0 150 299 0
+
+#light green
+Color .5 1 .5
+
+#center-BL
+Line 150 150 0 0 299 0
+
+#yellow
+Color 1 1 .5
+
+#center-LM
+Line 150 150 0 0 150 0
+
+
+#Grey
+Color .5 .5 .5
+
+#center- TL
+Line 150 150 0 0 0 0
+
+
+
+WorldEnd
+FrameEnd

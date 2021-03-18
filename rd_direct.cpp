@@ -209,7 +209,7 @@ struct point {
 //	DB("center " + to_string(xcenter) + " " + to_string(ycenter));
 	vector<point> circle;
 	while(x <= r){
-		if(2*x*x < r*r){
+		if(2*x*x < r*r+1){
 		point spot;
 		spot.point_z = 0;
 		
@@ -277,9 +277,9 @@ int REDirect::rd_line(const float start[3], const float end[3])
 {
 	int x1 = start[0], x2 =end[0];
 	int y1 = start[1], y2 =end[1];
-	int x0 = x1, y0 = y1;
 	int xchan = x2-x1, ychan = y2-y1;
 	if( xchan < 0){
+		DB("flipped");
 	x2 = start[0]; 
 	x1 =end[0];
 	y2 = start[1];
@@ -287,26 +287,42 @@ int REDirect::rd_line(const float start[3], const float end[3])
 	
 	xchan = x2-x1; 
 	ychan = y2-y1;
-	}
 	
+	
+	}
 	int p0 = 2*ychan - xchan;
-
 	int inc_plower = 2*ychan, inc_pupper = 2*ychan -2*xchan;
+	if(y2 < y1) {
+		p0 = 2*xchan - ychan;
+		inc_plower = 2*xchan;
+		inc_pupper = 2*xchan - 2*ychan;
+	}
+	int x0 = x1, y0 = y1;
+	
 	DB("x1 = " + to_string(x1) + " x2 = " + to_string(x2) + " xchan = " + to_string(xchan));
 	DB("y1 = " + to_string(y1) + " y2 = " + to_string(y2) + " ychan = " + to_string(ychan));
-//	DB("p0 = " + to_string(p0) + " plower = " + to_string(inc_plower) + " pupper = " + to_string(inc_pupper));
+// 	DB("p0 = " + to_string(p0) + " plower = " + to_string(inc_plower) + " pupper = " + to_string(inc_pupper));
 	while(x0 <= x2){
 
 		float point[3] = {float(x0),float(y0), 0};
 		rd_point(point);
-		x0++;
+		if(xchan > 0)
+			x0++;
 		if( p0 < 0)
 			p0 += inc_plower;
 		else{
-			if(ychan<0)
+			if(ychan<0) {
 				y0--;
-			else
+			//	DB("y is negitive");
+				if(y0 < y2)
+					break;
+			}
+			else{
 				y0++;
+			//	DB("y is positive");
+				if(y0 > y2)
+					break;
+			}
 			p0 += inc_pupper;
 		}
 	}	

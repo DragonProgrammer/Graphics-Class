@@ -1,0 +1,39 @@
+Display "Circle" "Screen" "rgbsingle"
+
+Format 100 50
+
+FrameBegin 1
+WorldBegin
+
+Circle 25 25 0 1
+Circle 75 25 0 12
+Color 1 .5 1 
+
+# TM - center 
+Circle 25 25 0 3
+Circle 75 25 0 10
+
+Color 1 .5 .5
+Circle 25 25 0 5
+Circle 75 25 0 8
+
+Color .5 1 1
+
+Circle 25 25 0 7
+Circle 75 25 0 6
+
+Color .5 .5 1
+
+Circle 25 25 0 9
+Circle 75 25 0 4
+
+Color .5 1 .5
+
+Circle 25 25 0 11
+Circle 75 25 0 2
+
+
+
+
+WorldEnd
+FrameEnd

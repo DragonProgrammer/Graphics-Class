@@ -1,0 +1,48 @@
+Display "Line_single" "Screen" "rgbsingle"
+
+Format 300 300
+
+FrameBegin 1
+WorldBegin
+
+# center - RM
+Line 100 100 0 100 200 0
+Line 100 100 0 200 100 0
+Line 200 200 0 100 200 0
+Line 200 200 0 200 100 0
+
+Color 1 .5 1 
+
+Line 150 100 0 150 200 0
+Line 100 150 0 200 150 0
+
+Color 0 0 0
+
+Point 150 150 0
+
+Color 1 .5 .5
+Fill 125 125 0 
+
+Color .5 1 1
+
+Fill 175 175 0 
+
+Color .5 .5 1
+Fill 175 125 0 
+
+#center - BM
+
+Color .5 1 .5
+Fill 125 175 0 
+
+
+Color 1 1 .5
+
+
+Color .5 .5 .5
+
+
+
+
+WorldEnd
+FrameEnd
