@@ -209,7 +209,7 @@ struct point {
 //	DB("center " + to_string(xcenter) + " " + to_string(ycenter));
 	vector<point> circle;
 	while(x <= r){
-		if(2*x*x < r*r+1){
+		if(x*x <= y*y){
 		point spot;
 		spot.point_z = 0;
 		
@@ -262,6 +262,7 @@ struct point {
 			y--;
 		}
 	}
+	
 	for( auto a : circle)
 		if( a.point_x >= 0 &&  a.point_y >= 0){
 			float cord[3] = {a.point_x, a.point_y, a.point_z};
