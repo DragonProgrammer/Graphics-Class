@@ -21,24 +21,24 @@ int rd_frame_begin(int frame_no);
 
 int rd_frame_end(void);
 /*
-int rd_render_init(void);  /i* Initialize renderer */
-/*
-int rd_render_cleanup(void);
+int rd_render_init(void);  /i* Initialize renderer 
 
- /s**********************   Camera  ******************************************/
+int rd_render_cleanup(void);
+*/
+ /**********************   Camera  ******************************************/
 
 int rd_camera_eye(const float eyepoint[3]);
 
 int rd_camera_at(const float atpoint[3]);
 
 int rd_camera_up(const float up[3]);
-/*
+
 int rd_camera_fov(float fov);
 
 int rd_clipping(float znear, float zfar);
  
- /w**********************   Transformations **********************************/
-/*
+ /**********************   Transformations **********************************/
+
 int rd_translate(const float offset[3]);
 
 int rd_scale(const float scale_factor[3]);
@@ -48,14 +48,14 @@ int rd_rotate_xy(float angle);
 int rd_rotate_yz(float angle);
 
 int rd_rotate_zx(float angle);
-
+/*
 int rd_matrix(const float * mat);
-	       
+*/	       
 int rd_xform_push(void);
 
 int rd_xform_pop(void);
 
-  /s**********************   Geometric Objects  *******************************/
+  /**********************   Geometric Objects  *******************************/
 
 
 

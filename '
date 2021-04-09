@@ -1,4 +1,15 @@
-#include "Debug.h"
+
+
+#define DEBUG
+#ifdef DEBUG
+#include <iostream>
+using std::cerr;
+using std::end;
+#define DB_FLAG 1
+#define DB(x, level) if(DB_FLAG > level)do{cerr<<x<<endl;}while(0)
+#else
+#define DB(x) do{}while(0)
+#endif
 #include <math.h>
 #include "frame.h"
 #include "rd_display.h"
@@ -74,79 +85,90 @@ void line_pipeline(point p1, char FLAG){
 	input.push_back(p1[2]);
 	DB(input[0] << " " << input[1],0);
 		float W = 0;
+//	W += input[0]*input[0];
+//	W += input[1]*input[1];
+//	W += input[2]*input[2];
+//	W = sqrt(W);
+//	if(W == 0){W = 1;}
+//	input[0] = input[0]/W;
+//	input[0] = input[1]/W;
+//	input[0] = input[2]/W;
 	input.push_back(1);
 //	DB("made input point",0);
-	xform T = current_xform;
-	DB("Curent xform",-1);
-//	T[2][3] = -3;	
-	DBM(T,-1);
-	point P = input;
+	xform P = current_xform;
+	for(int r =0; r <4; r++){
+//		for(int c =0; c <4; c++)
+//			cout << P[r][c] << "   ";
+//		cout << endl;
+	}
+//	DB("made curent xform",0);
+//
+//	DB("Point before curent xform:",2);
+//	DB(input[0] << " " << input[1] << " " << input[2] << " " << input[3],2);
+	point PP = t.multiply_point(P,input);	
+//	DB("Point after curent xform:",2);
+//	DB(PP[0] << " " << PP[1] << " " << PP[2] << " " << PP[3],2);
+//	DB("mathed point",0);
+	xform P1 = W2C;
+//	for(int r =0; r <4; r++){
+//		for(int c =0; c <4; c++)
+//			cout << P1[r][c] << "   ";
+//		cout << endl;
+//	}
+	point clipping_point1 = t.multiply_point(P1, PP);
 
-	DB("Input point: " << P[0] << " " << P[1] << " " << P[2] << " " << P[3],-1);
-	P = t.multiply_point(T,P);	
-	DB("Point after curent xform: " << P[0] << " " << P[1] << " " << P[2] << " " << P[3],-1);
-	DB("World 2 clip",-1);
-	T = W2C;
-	DBM(T,-1);
-	
-	P = t.multiply_point(T, P);
-	DB("clipping point: " << P[0] << " " << P[1] << " " << P[2] << " " << P[3],-1);
-
+//	DB(clipping_point1[0] << " " << clipping_point1[1],0);
 	if(FLAG == 'M')
-		last_point = P;
+		last_point = clipping_point1;
 //		last_point = input;		
 	if(FLAG == 'D'){
 
 	// set to points to device
-		T = C2C;
-		DB("\ncamer to clip",-1);
-		DBM(T, -1);
+		xform P2 = C2C;
+//		DB("camer to clip",0);
+//	for(int r =0; r <4; r++){
+//		for(int c =0; c <4; c++)
+//			cout << P2[r][c] << "   ";
+//		cout << endl;
+//	}
 
-		point P2 = t.multiply_point(T, P); //curent point
-		point P1 = t.multiply_point(T, last_point); //saved point
-	DB("C2C point 1: " << P1[0] << " " << P1[1] << " " << P1[2] << " " << P1[3],-1);
-	DB("C2C point 2: " << P2[0] << " " << P2[1] << " " << P2[2] << " " << P2[3],-1);
-		DB("Clip to divice",-1);
-		T = C2D;
-		DBM(T, -1);
-		
-	
-		P1 = t.multiply_point(T, P1); //curent point
-		P2 = t.multiply_point(T, P2); //curent point
-	DB("C2D point 1: " << P1[0] << " " << P1[1] << " " << P1[2] << " " << P1[3],-1);
-	DB("C2D point 2: " << P2[0] << " " << P2[1] << " " << P2[2] << " " << P2[3],-1);
+		point PP2 = t.multiply_point(P2, clipping_point1); //curent point
+//		DB("point 2 " << PP2[0] << " " << PP2[1],0);
+		point PP2B = t.multiply_point(P2, last_point); //saved point
+//		DB("point 1 " << PP2B[0] << " " << PP2B[1],0);
+		DB("Clip to divice",0);
+		xform P3 = C2D;
+	for(int r =0; r <4; r++){
+		for(int c =0; c <4; c++)
+			cout << P3[r][c] << "   ";
+		cout << endl;
+	}
+		point Device_point_2 = t.multiply_point(P3, PP2);
+		DB("point 2 before" << input[0] << " " << input[1],10);
+//		point Device_point_2 = t.multiply_point(P3, input);
+//		DB("point 2 " << Device_point_2[0] << " " << Device_point_2[1],0);
+		DB("point 2 before" << last_point[0] << " " << last_point[1],10);
+		point Device_point_1 = t.multiply_point(P3, PP2B);
+//		DB("point 1 " << Device_point_1[0] << " " << Device_point_1[1],0);
 
-		if(P1[3] > 1){
-			P1[0] = P1[0]/P1[3];
-			P1[1] = P1[1]/P1[3];
-			P1[2] = P1[2]/P1[3];
-			P1[3] = P1[3]/P1[3];
-		}
-		if(P2[3] > 1){
-			P2[0] = P2[0]/P2[3];
-			P2[1] = P2[1]/P2[3];
-			P2[2] = P2[2]/P2[3];
-			P2[3] = P2[3]/P2[3];
-		}
+
 	// line drawing stuff
- 		int x1 = P1[0], x2 = P2[0];
+ 		int x1 = Device_point_1[0], x2 = Device_point_2[0];
  	//	int x1 = last_point[0], x2 = input[0];
- 		int y1 = P1[1], y2 = P2[1];
+ 		int y1 = Device_point_1[1], y2 = Device_point_2[1];
  	//	int y1 = last_point[1], y2 = input[1];
 		int xchan = x2-x1, ychan = y2-y1;
-	DB("Line point 1: " << x1 << " " << y1 << " " << P1[2] << " " << P1[3],-1);
-	DB("Line point 2: " << x2 << " " << y2 << " " << P2[2] << " " << P2[3],-1);
  		DB("piont 1: " << x1 << " " << y1,10);	
  		DB("piont 2: " << x2 << " " << y2,10);	
 		if( xchan < 0){
 			DB("flipped",0);
-			x2 = P1[0]; 
+			x2 = Device_point_1[0]; 
 //			x2 = last_point[0]; 
-			x1 = P2[0] ;
+			x1 = Device_point_2[0] ;
 	//		x1 = input[0] ;
-			y1 = P2[1] ;
+			y1 = Device_point_2[1] ;
 		//	y1 = last_point[1] ;
-			y2 = P1[1] ;
+			y2 = Device_point_1[1] ;
 		//	y2 = input[1] ;
 			xchan = x2-x1;
 			ychan = y2-y1;
@@ -210,7 +232,7 @@ void set_active(float color[3]){
 	active.g_scale = color[1];
 	active.b_scale = color[2];
 	active = color_convert(active);
-	DB("active is " << active, 10);
+	DB("active is " << active, 0);
 }
 
 void set_back(float color[3]){
@@ -220,7 +242,7 @@ background.r_scale = color[0];
 	background.g_scale = color[1];
 	background.b_scale = color[2];
 	background = color_convert(background);
-	DB("bacground in " <<background, 10);
+	DB("bacground in " <<background, 0);
 }
 /*
 int get_next_id(){
@@ -238,7 +260,7 @@ int get_next_id(){
 void set_pixel(int x, int y){
 	DB("in set pixel", 10);	
 //	cout << to_string(x) + " " + to_string(y) << endl;
-	DB(x << " " << y,10);
+	DB(x << " " << y,0);
 	DB( "color before "<<  current.frame_image[x][y],10);
 	current.frame_image[int(x)][int(y)]=active;
 	DB("I set the pixel", 10);	

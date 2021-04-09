@@ -4,8 +4,8 @@ CXX = g++
 CCFLAGS = -g -Wall  
 #CXXFLAGS = -g -Wall -fsanitize=address -fno-omit-frame-pointer
 
-rd_view: libcs631.a rd_direct.o pnm_display.o global.o frame.o color.o  
-		$(CXX) -o rd_view $(CXXFLAGS) libcs631.a rd_direct.o color.o pnm_display.o  frame.o globals.o  -lm -lX11
+rd_view: libcs631.a rd_direct.o pnm_display.o global.o frame.o color.o transformations.o 
+		$(CXX) -o rd_view $(CXXFLAGS) libcs631.a rd_direct.o color.o pnm_display.o  frame.o globals.o transformations.o -lm -lX11
 
 # Add whatever additional files and rules here, and also
 # # in the final linking rule above.
@@ -25,6 +25,9 @@ global.o: globals.cpp globals.h
 
 frame.o: frame.h frame.cpp
 		$(CXX) $(CXXFLAGS) -c frame.cpp
+
+transformations.o: transformations.cpp transformations.h
+		$(CXX) $(CXXFLAGS) -c transformations.cpp
 
 #rd_enginebase.o: rd_enginebase.h
 #	 	$(CC) $(CCFLAGS) -c rd_enginebase.cpp
