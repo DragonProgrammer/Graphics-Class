@@ -1,4 +1,5 @@
 #include "Debug.h"
+#include "objects.h"
 #include "rd_direct.h"
 #include <string>
 #include "rd_display.h"
@@ -31,12 +32,15 @@ transforms t;
 DB("world begin", 2);
 current_xform = t.identity();
 DB("Made identity", 2);
-Camera_View = 90;
-camera_eye = {0,0,0};
+if(Camera_View == 0)
+	Camera_View = 90;
 camera_near = 1.0;
 camera_far = 1000000000.0;
+if(camera_up.size() != 3){
 camera_up = {0, 1.0, 0};
 at_point = {0,0,-1.0};
+camera_eye = {0,0,0};
+}
 
 DB("Made Camera elements", 2);
 W2C = t.world_to_camera(camera_eye, at_point, camera_up);
@@ -399,12 +403,14 @@ int REDirect::rd_cone(float height, float radius, float thetamax)
 {
 	return 0;
 }
-
+*/
 int REDirect::rd_cube(void)
 {
-	return 0;
+	objects o;
+	o.draw_cube();
+	return RD_OK;
 }
-
+/*
 int REDirect::rd_cylinder(float radius, float zmin, float zmax, float thetamax)
 {
 	return 0;

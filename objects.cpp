@@ -1,16 +1,4 @@
-#define DEBUG
-#ifdef DEBUG
-#include <iostream>
-using std::cerr;
-using std::endl;
-#define DB_FLAG 1
-#define DB(x,level) if(DB_FLAG > level) do{cerr << x << endl;}while(0)
-#else
-#define DB(x,level) if(DB_FLAG > level) do{}while(0)
-#endif
-
-
-
+#include "Debug.h"
 #include "objects.h"
 #include <vector>
 #include "frame.h"
@@ -24,11 +12,11 @@ void objects::draw_cube() {
 	point v1, v2, v3, v4, v5, v6, v7, v8;
 	v1 = {-1, -1, -1};
 	v2 = {-1, -1, 1};
-	v3 = {0, 1, 0};
-	v4 = {1, 0, 0};
-	v5 = {1, 1, 0};
-	v6 = {0, 1, 1};
-	v7 = {1, 0, 1};
+	v3 = {-1, 1, -1};
+	v4 = {1, -1, -1};
+	v5 = {1, 1, -1};
+	v6 = {-1, 1, 1};
+	v7 = {1, -1, 1};
 	v8 = {1, 1, 1};
 
 	// faces
@@ -59,69 +47,69 @@ void objects::draw_cube() {
 //	set_active(color);
 	line_pipeline(v1, 'M');
 		line_pipeline(v2, 'D');
-//		line_pipeline(v6, 'D');
-//		line_pipeline(v3, 'D');
-//	line_pipeline(v1, 'D');
+		line_pipeline(v6, 'D');
+		line_pipeline(v3, 'D');
+	line_pipeline(v1, 'D');
 
 	color[0] = .25;
 	color[1] = .25;
 	color[2] = .25;
 //	set_active(color);
-//	line_pipeline(v6, 'M');
-//	line_pipeline(v8, 'D');
-//	line_pipeline(v5, 'D');
-//	line_pipeline(v3, 'D');
-//	line_pipeline(v6, 'D');
+	line_pipeline(v6, 'M');
+	line_pipeline(v8, 'D');
+	line_pipeline(v5, 'D');
+	line_pipeline(v3, 'D');
+	line_pipeline(v6, 'D');
 
 	color[0] = .75;
 	color[1] = .75;
 	color[2] = .75;
 //	set_active(color);
-//	line_pipeline(v5, 'M');
-//	line_pipeline(v4, 'D');
-//	line_pipeline(v7, 'D');
-//	line_pipeline(v8, 'D');
-//	line_pipeline(v5, 'D');
+	line_pipeline(v5, 'M');
+	line_pipeline(v4, 'D');
+	line_pipeline(v7, 'D');
+	line_pipeline(v8, 'D');
+	line_pipeline(v5, 'D');
 
 	color[0] = 1;
 	color[1] = 1;
 	color[2] = .5;
 //	set_active(color);
-//	line_pipeline(v4, 'M');
-//	line_pipeline(v1, 'D');
-//	line_pipeline(v2, 'D');
-//	line_pipeline(v7, 'D');
-//	line_pipeline(v4, 'D');
+	line_pipeline(v4, 'M');
+	line_pipeline(v1, 'D');
+	line_pipeline(v2, 'D');
+	line_pipeline(v7, 'D');
+	line_pipeline(v4, 'D');
 	
 	color[0] = 1;
 	color[1] = .5;
 	color[2] = 1;
 //	set_active(color);
-//	DB("\nstore V1",-1);
+	DB("\nstore V1",0);
 	
 //	line_pipeline(v1, 'M');
-//	DB("\nV1 to V3",-1);
+	DB("\nV1 to V3",0);
 	color[0] = .5;
 	color[1] = .5;
 	color[2] = .5;
 //	set_active(color);
 //	line_pipeline(v3, 'D');
 
-//	DB("\nV3 to V5",-1);
+	DB("\nV3 to V5",0);
 	color[0] = .25;
 	color[1] = .25;
 	color[2] = .25;
 //	set_active(color);
 //	line_pipeline(v5, 'D');
 	
-//	DB("\nV5 to V4 yellow",-1);
+	DB("\nV5 to V4 yellow",0);
 	color[0] = 1;
 	color[1] = 1;
 	color[2] = .5;
 //	set_active(color);
 //	line_pipeline(v4, 'D');
-	
-//	DB("\nV4 to V1",-1);
+
+	DB("\nV4 to V1",0);
 	color[0] = .75;
 	color[1] = .75;
 	color[2] = .75;

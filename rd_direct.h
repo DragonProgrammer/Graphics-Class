@@ -81,9 +81,9 @@ int rd_pointset(const string & vertex_type, int nvertex, const float * vertex);
 int rd_polyset(const string & vertex_type, int nvertex, const float * vertex, int nface,   const int * face);
 
 int rd_cone(float height, float radius, float thetamax);
-
+*/
 int rd_cube(void);
-
+/*
 int rd_cylinder(float radius, float zmin, float zmax, float thetamax);
 
 int rd_disk(float height, float radius, float theta);

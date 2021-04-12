@@ -104,6 +104,8 @@ void line_pipeline(point p1, char FLAG){
 
 		point P2 = t.multiply_point(T, P); //curent point
 		point P1 = t.multiply_point(T, last_point); //saved point
+
+		last_point = P;
 	DB("C2C point 1: " << P1[0] << " " << P1[1] << " " << P1[2] << " " << P1[3],-1);
 	DB("C2C point 2: " << P2[0] << " " << P2[1] << " " << P2[2] << " " << P2[3],-1);
 		DB("Clip to divice",-1);
@@ -134,60 +136,68 @@ void line_pipeline(point p1, char FLAG){
  		int y1 = P1[1], y2 = P2[1];
  	//	int y1 = last_point[1], y2 = input[1];
 		int xchan = x2-x1, ychan = y2-y1;
-	DB("Line point 1: " << x1 << " " << y1 << " " << P1[2] << " " << P1[3],-1);
-	DB("Line point 2: " << x2 << " " << y2 << " " << P2[2] << " " << P2[3],-1);
+	DB("Line point 1: " << x1 << " " << y1 << " " << P1[2] << " " << P1[3],-2);
+	DB("Line point 2: " << x2 << " " << y2 << " " << P2[2] << " " << P2[3],-2);
  		DB("piont 1: " << x1 << " " << y1,10);	
  		DB("piont 2: " << x2 << " " << y2,10);	
 		if( xchan < 0){
 			DB("flipped",0);
 			x2 = P1[0]; 
-//			x2 = last_point[0]; 
 			x1 = P2[0] ;
-	//		x1 = input[0] ;
 			y1 = P2[1] ;
-		//	y1 = last_point[1] ;
 			y2 = P1[1] ;
-		//	y2 = input[1] ;
 			xchan = x2-x1;
 			ychan = y2-y1;
 		}
-		int p0 = 2*ychan - xchan;
-		int inc_plower = 2*ychan, inc_pupper = 2*ychan -2*xchan;
-		if(y2 < y1) {
-			p0 = 2*xchan - ychan;
-			inc_plower = 2*xchan;
-			inc_pupper = 2*xchan - 2*ychan;
-		}
-		int x0 = x1, y0 = y1;
-		
-		while(x0 < x2){
-			
 
-			float to_draw[3] = {float(x0), float(y0),0}; // assuming Z = 0
-			r.rd_point(to_draw);
-	        	
-			if(xchan > 0)
-		        	x0++;
-			if( p0 < 0)
-				p0 += inc_plower;
-			else{
-                		if(ychan<0) {
-					y0--;
-		        	if(y0 < y2)
-			        	break;
-				}
-				else{
-					y0++;
-				if(y0 > y2)
-					break;
-				}
-				p0 += inc_pupper;
+		float x0 =float(x1), y0 =float(y1);
+		int steps;
+		float incX, incY;
+		if(abs(ychan) ==0 ){
+			while(x0 != x2){
+				steps = abs(xchan);
+				incX = float(xchan)/float(steps);
+				float to_draw[3] = {float(x0), float(y0),0}; // assuming Z = 0
+				r.rd_point(to_draw);
+				x0 += incX;
 			}
-        	}
+		}	
+		else if(abs(xchan) ==0 ){
+			while(y0 != y2){
+				steps = abs(ychan);
+				incY = float(ychan)/float(steps);
+				float to_draw[3] = {float(x0), float(y0),0}; // assuming Z = 0
+				r.rd_point(to_draw);
+				y0 += incY;
+			}
+		}	
+		else if(abs(xchan) >= abs(ychan)){
+			while(x0 != x2 && y0 != y2){
+				steps = abs(xchan);
+				incY = float(ychan)/float(steps);
+				incX = float(xchan)/float(steps);
+				float to_draw[3] = {float(x0), float(y0),0}; // assuming Z = 0
+				r.rd_point(to_draw);
+				x0 += incX;
+				y0 += incY;
+			}
+		}	
+		else if(abs(xchan) < abs(ychan)){
+			while(x0 != x2 && y0 != y2){
+				steps = abs(ychan);
+				incY = float(ychan)/float(steps);
+				incX = float(xchan)/float(steps);
+				float to_draw[3] = {float(x0), float(y0),0}; // assuming Z = 0
+				r.rd_point(to_draw);
+				x0 += incX;
+				y0 += incY;
+				}
+		}	
+				
+				
+		
 
-		}
-
-
+}
 }
  
  void push(xform x1){
