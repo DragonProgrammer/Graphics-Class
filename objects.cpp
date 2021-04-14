@@ -4,6 +4,8 @@
 #include "frame.h"
 #include "globals.h"
 #include <string>
+#include <cmath>
+
 using std::to_string;
 using std::vector;
 
@@ -118,149 +120,153 @@ void objects::draw_cube() {
 }
 
  void objects::draw_sphere(int radius){
- 	struct point {
-      		float point_x;
-      		float point_y;
-      		float point_z;
-       };
 
-	float xcenter = 0, ycenter = 0, r = radius;
-	int p = 1 - r;
-	float x = 0, y = r;
-	float codinate[3] = {x, y, 0};
+	float x, x2, y, y2;
+	//	float codinate[3] = {x, y, 0};
 //DB("center " + to_string(xcenter) + " " + to_string(ycenter),10);
-	vector<point> circle;
-  	while (x <= r) {
-      		if (x * x <= y * y) {
-               		point spot;
-                 	spot.point_z = 0; // for xy plane
-               		spot.point_x = xcenter + x;
-                    	spot.point_y = ycenter + y;
-//DB( "section 1 " << spot.point_z << " " << spot.point_y,10);
-          	        circle.push_back(spot);
-                	spot.point_x = xcenter - x;
-                      	spot.point_y = ycenter + y;
-//DB( "section 2 " << spot.point_z << " " << spot.point_y,10);
-                        circle.push_back(spot);
-        		spot.point_x = xcenter + x;
-        		spot.point_y = ycenter - y;
-//DB( "section 3 " << spot.point_z << " " << spot.point_y,10);
-               		circle.push_back(spot);
-                  	spot.point_x = xcenter - x;
-                     	spot.point_y = ycenter - y;
-//DB( "section 4 " << spot.point_z << " " << spot.point_y,10);
-                        circle.push_back(spot);
-		        spot.point_x = xcenter + y;
-                	spot.point_y = ycenter + x;
-//DB( "section 5 " << spot.point_z << " " << spot.point_y,10);
-	                circle.push_back(spot);
-        	        spot.point_x = xcenter - y;
-                	spot.point_y = ycenter + x;
-//DB( "section 6 " << spot.point_z << " " << spot.point_y,10);
-                        circle.push_back(spot);
-	                spot.point_x = xcenter + y;
-        	        spot.point_y = ycenter - x;
-//DB( "section 7 " << spot.point_z << " " << spot.point_y,10);
-                	 circle.push_back(spot);
-                	 spot.point_x = xcenter - y;
-               		 spot.point_y = ycenter - x;
-//DB( "section 8 " << spot.point_z << " " << spot.point_y,10);
-                 	 circle.push_back(spot);
-
-//DB("ZX plane",10); 
-
-			 spot.point_y = 0; // for xy plane
-               		spot.point_x = xcenter + x;
-                    	spot.point_z = ycenter + y;
-//DB( "section 1 " << spot.point_x << " " << spot.point_z,10);
-          	        circle.push_back(spot);
-                	spot.point_x = xcenter - x;
-                      	spot.point_z = ycenter + y;
-//DB( "section 2 " << spot.point_x << " " << spot.point_z,10);
-                        circle.push_back(spot);
-        		spot.point_x = xcenter + x;
-        		spot.point_z = ycenter - y;
-//DB( "section 3 " << spot.point_x << " " << spot.point_z,10);
-               		circle.push_back(spot);
-                  	spot.point_x = xcenter - x;
-                     	spot.point_z = ycenter - y;
-//DB( "section 4 " << spot.point_x << " " << spot.point_z,10);
-                        circle.push_back(spot);
-		        spot.point_x = xcenter + y;
-                	spot.point_z = ycenter + x;
-//DB( "section 5 " << spot.point_x << " " << spot.point_z,10);
-	                circle.push_back(spot);
-        	        spot.point_x = xcenter - y;
-                	spot.point_z = ycenter + x;
-//DB( "section 6 " << spot.point_x << " " << spot.point_z,10);
-                        circle.push_back(spot);
-	                spot.point_x = xcenter + y;
-        	        spot.point_z = ycenter - x;
-//DB( "section 7 " << spot.point_x << " " << spot.point_z,10);
-                	 circle.push_back(spot);
-                	 spot.point_x = xcenter - y;
-               		 spot.point_z = ycenter - x;
-//DB( "section 8 " << spot.point_x << " " << spot.point_z,10);
-                 	 circle.push_back(spot);
-//DB("YZ plane",10); 
-
-			 spot.point_x = 0; // for xy plane
-               		spot.point_z = xcenter + x;
-                    	spot.point_y = ycenter + y;
-//DB( "section 1 " << spot.point_z << " " << spot.point_y,10);
-          	        circle.push_back(spot);
-                	spot.point_z = xcenter - x;
-                      	spot.point_y = ycenter + y;
-//DB( "section 2 " << spot.point_z << " " << spot.point_y,10);
-                        circle.push_back(spot);
-        		spot.point_z = xcenter + x;
-        		spot.point_y = ycenter - y;
-//DB( "section 3 " << spot.point_z << " " << spot.point_y,10);
-               		circle.push_back(spot);
-                  	spot.point_z = xcenter - x;
-                     	spot.point_y = ycenter - y;
-//DB( "section 4 " << spot.point_z << " " << spot.point_y,10);
-                        circle.push_back(spot);
-		        spot.point_z = xcenter + y;
-                	spot.point_y = ycenter + x;
-//DB( "section 5 " << spot.point_z << " " << spot.point_y,10);
-	                circle.push_back(spot);
-        	        spot.point_z = xcenter - y;
-                	spot.point_y = ycenter + x;
-//DB( "section 6 " << spot.point_z << " " << spot.point_y,10);
-                        circle.push_back(spot);
-	                spot.point_z = xcenter + y;
-        	        spot.point_y = ycenter - x;
-//DB( "section 7 " << spot.point_z << " " << spot.point_y,10);
-                	 circle.push_back(spot);
-                	 spot.point_z = xcenter - y;
-               		 spot.point_y = ycenter - x;
-//DB( "section 8 " << spot.point_z << " " << spot.point_y,10);
-                 	 circle.push_back(spot);
-                }
-      x++;
-       if (p < 0)
-                 p += 2 * x + 1;
-        else {
-                  p += 2 * x - 2 * y + 3;
-                   y--;
-            }
- }
-
-	for (auto a : circle)
-		if (a.point_x >= 0 && a.point_y >= 0) {
-//		      DB(to_string(a.point_x) << " " << to_string(a.point_y),10);
-		                            //    rd_point(cord);
-					    point_pipeline(a.point_x, a.point_y, a.point_z);
-			                  }
-			   
-			     }
+DB( "radius :" << radius ,-2);
+int segments = 20;
+float theta, theta2;
+for(int i = 0; i< segments; i++){
+	theta = (float(i)/float(segments)) *2 * M_PI;
+	x = radius*sin(theta);
+	y = radius*cos(theta);
+	point spot;
+	vector<float> point;
+	point.push_back(x);
+	point.push_back(y);
+	point.push_back(0);
+	line_pipeline(point, 'M');
+	
+	theta2 = (float(i+1)/float(segments)) *2 * M_PI;
+	x2 = radius*sin(theta2);
+	y2 = radius*cos(theta2);
+	point[0] = x2;
+	point[1] = y2;
+	line_pipeline(point, 'D');
+}
+for(int i = 0; i< segments; i++){
+	theta = (float(i)/float(segments)) *2 * M_PI;
+	x = radius*sin(theta);
+	y = radius*cos(theta);
+	point spot;
+	vector<float> point;
+	point.push_back(0);
+	point.push_back(x);
+	point.push_back(y);
+	line_pipeline(point, 'M');
+	
+	theta2 = (float(i+1)/float(segments)) *2 * M_PI;
+	x2 = radius*sin(theta2);
+	y2 = radius*cos(theta2);
+	point[1] = x2;
+	point[2] = y2;
+	line_pipeline(point, 'D');
+}
+for(int i = 0; i< segments; i++){
+	theta = (float(i)/float(segments)) *2 * M_PI;
+	x = radius*sin(theta);
+	y = radius*cos(theta);
+	point spot;
+	vector<float> point;
+	point.push_back(x);
+	point.push_back(0);
+	point.push_back(y);
+	line_pipeline(point, 'M');
+	
+	theta2 = (float(i+1)/float(segments)) *2 * M_PI;
+	x2 = radius*sin(theta2);
+	y2 = radius*cos(theta2);
+	point[0] = x2;
+	point[2] = y2;
+	line_pipeline(point, 'D');
+}
+}
 
 
+ void objects::draw_cone(int radius, int hieght){
+int segments = 20;
+float theta, theta2;
+float x, x2, y, y2;
+for(int i = 0; i< segments; i++){
+	theta = (float(i)/float(segments)) *2 * M_PI;
+	x = radius*sin(theta);
+	y = radius*cos(theta);
+	point spot;
+	point tip;
+	tip.push_back(0);
+	tip.push_back(0);
+	tip.push_back(hieght);
+	spot.push_back(x);
+	spot.push_back(y);
+	spot.push_back(0);
+	line_pipeline(spot, 'M');
+	line_pipeline(tip, 'D');
 
+	line_pipeline(spot, 'M');
+	theta2 = (float(i+1)/float(segments)) *2 * M_PI;
+	x2 = radius*sin(theta2);
+	y2 = radius*cos(theta2);
+	spot[0] = x2;
+	spot[1] = y2;
+	line_pipeline(spot, 'D');
+}
+}
+	
+void objects::draw_cylinder(int radius, int base, int top ){
+int segments = 20;
+float theta, theta2;
+float x, x2, y, y2;
+for(int i = 0; i< segments; i++){
+	theta = (float(i)/float(segments)) *2 * M_PI;
+	x = radius*sin(theta);
+	y = radius*cos(theta);
+	point spot;
+	point upper_spot;
+	vector<float> point;
+	spot.push_back(x);
+	spot.push_back(y);
+	spot.push_back(base);
+	upper_spot.push_back(x);
+	upper_spot.push_back(y);
+	upper_spot.push_back(top);
+	line_pipeline(spot, 'M');
+	line_pipeline(upper_spot, 'D');
 
-
-
-// void objects::draw_cone();
-// void objects::draw_cylinder();
+	line_pipeline(spot, 'M');
+	theta2 = (float(i+1)/float(segments)) *2 * M_PI;
+	x2 = radius*sin(theta2);
+	y2 = radius*cos(theta2);
+	spot[0] = x2;
+	spot[1] = y2;
+	line_pipeline(spot, 'D');
+	line_pipeline(upper_spot, 'M');
+	upper_spot[0] = x2;
+	upper_spot[1] = y2;
+	line_pipeline(upper_spot, 'D');
+}
+}
 // void objects::draw_disk();
+ void objects::draw_disk(int radius, int hieght){
+int segments = 20;
+float theta, theta2;
+float x, x2, y, y2;
+for(int i = 0; i< segments; i++){
+	theta = (float(i)/float(segments)) *2 * M_PI;
+	x = radius*sin(theta);
+	y = radius*cos(theta);
+	point spot;
+	spot.push_back(x);
+	spot.push_back(y);
+	spot.push_back(hieght);
+	line_pipeline(spot, 'M');
+
+	line_pipeline(spot, 'M');
+	theta2 = (float(i+1)/float(segments)) *2 * M_PI;
+	x2 = radius*sin(theta2);
+	y2 = radius*cos(theta2);
+	spot[0] = x2;
+	spot[1] = y2;
+	line_pipeline(spot, 'D');
+}
+}

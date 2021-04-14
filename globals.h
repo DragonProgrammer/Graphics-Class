@@ -56,7 +56,7 @@ extern vector<xform> xform_stack;
 extern xform pop();
 extern void push(xform x1);
 
-extern point point_pipeline(float x, float y, float z);
+extern point point_pipeline(point p);
 extern void line_pipeline(point p1, char FLAG);
 
 

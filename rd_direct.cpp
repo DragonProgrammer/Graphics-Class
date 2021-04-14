@@ -2,17 +2,23 @@
 #include "objects.h"
 #include "rd_direct.h"
 #include <string>
+#include <cstring>
 #include "rd_display.h"
 #include "frame.h"
 #include "globals.h"
 #include "rd_error.h"
+#include <sstream>
 #include <iostream>
+#include <stdio.h>
 #include <vector>
 #include "transformations.h"
+using std::getline;
+using std::strtok;
 using std::string;
 using std::to_string;
 using std::cout;
 using std::endl;
+using std::stringstream;
 
 		/**********************   General functions  *******************************/
 int REDirect :: rd_display(const string & name, const string & type,  const string & mode){
@@ -388,39 +394,124 @@ DB( "set pixel", 10);
 	rd_write_pixel(p[0], p[1], pigment);
 	return RD_OK;
 }
-/*
+
 int REDirect::rd_pointset(const string & vertex_type, int nvertex, const float * vertex)
 {
-	return 0;
+	DB(vertex_type,0);
+	DB(nvertex,0);
+	DB(vertex,0);
+	stringstream input_stringstream(vertex_type);
+
+
+	vector<point> point_set;
+
+
+
+	for(int lines = 0; lines < (nvertex*3); lines += 3){
+		DB(vertex[lines], -2);
+		point coord;
+		coord.push_back(vertex[lines]);
+		coord.push_back(vertex[lines+1]);
+		coord.push_back(vertex[lines+2]);
+		point_set.push_back(coord);
+		DB(vertex[lines] << " " << vertex[lines+1] << " " << vertex[lines+2], -2);
+			
+		}
+	for(auto p : point_set){
+		point_pipeline(p);
+	}
+
+
+	return RD_OK;
 }
 
 int REDirect::rd_polyset(const string & vertex_type, int nvertex, const float * vertex, int nface,   const int * face)
 {
-	return 0;
+	vector<point> point_set;
+
+	DB(face,-2);
+
+
+	for(int lines = 0; lines < (nvertex*3); lines += 3){
+		DB(vertex[lines], 0);
+		point coord;
+		coord.push_back(vertex[lines]);
+		coord.push_back(vertex[lines+1]);
+		coord.push_back(vertex[lines+2]);
+		point_set.push_back(coord);
+		DB(vertex[lines] << " " << vertex[lines+1] << " " << vertex[lines+2], 0);
+			
+		}
+	vector< vector <int> > faces;
+	int p = 0;
+	for(int lines2 = 0; lines2 < nface; lines2++){
+		vector<int> corners;
+		while(face[p] != -1){
+			corners.push_back(face[p]);
+			DB(face[p], -2);
+			p++;
+		}
+		faces.push_back(corners);
+		p++;
+	}
+	DB("exit setup",-2);
+	point start;
+	point p2;
+	int vector_id;
+	vector<int> current_face;
+	for(int surface = 0; surface < nface; surface++){
+	current_face = faces[surface];
+	vector_id = current_face[0];
+	start = point_set[vector_id];
+	int npoints = current_face.size();
+	vector_id = current_face[npoints-1];
+	p2 = point_set[vector_id];
+	line_pipeline(start, 'M');
+	for(int line = 1; line < npoints; line++){
+	vector_id = current_face[line];
+	p2 = point_set[vector_id];
+	DB("line " << line, -2);
+	line_pipeline(p2, 'D');
+
+	}
+	
+	line_pipeline(start, 'D');
+	
+	}
+
+
+
+	return RD_OK;
 }
 
 int REDirect::rd_cone(float height, float radius, float thetamax)
 {
-	return 0;
+	objects o;
+	o.draw_cone(radius, height);
+	return RD_OK;
 }
-*/
+
 int REDirect::rd_cube(void)
 {
 	objects o;
 	o.draw_cube();
 	return RD_OK;
 }
-/*
 int REDirect::rd_cylinder(float radius, float zmin, float zmax, float thetamax)
 {
-	return 0;
+	objects o;
+	o.draw_cylinder(radius, zmin, zmax);
+	return RD_OK;
 }
 
 int REDirect::rd_disk(float height, float radius, float theta)
 {
-	return 0;
+	objects o;
+	o.draw_disk(radius, height);
+	return RD_OK;
 }
 
+/*
 int REDirect::rd_hyperboloid(const float start[3], const float end[3], float thetamax)
 {
 return 0;
@@ -430,12 +521,14 @@ int REDirect::rd_paraboloid(float rmax, float zmin, float zmax, float thetamax)
 {
 	return 0;
 }
-
+*/
 int REDirect::rd_sphere(float radius, float zmin, float zmax, float thetamax)
 {
-	return 0;
+	objects o;
+	o.draw_sphere(radius);
+	return RD_OK;
 }
-
+/*
 int REDirect::rd_sqsphere(float radius, float north, float east, float zmin, float zmax, float thetamax)
 {
 return 0;

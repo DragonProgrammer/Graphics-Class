@@ -23,7 +23,6 @@ color active;
 color match;
 
 
-
  /******************************Frome assign 2****************/
 
 typedef vector< vector<float> > xform;
@@ -44,12 +43,12 @@ xform C2D;
 vector<xform> xform_stack;
 
 
-point point_pipeline(float x, float y, float z){
+point point_pipeline(point p){
 	transforms t;
-	point input;
-	input.push_back(x);
-	input.push_back(y);
-	input.push_back(z);
+	point input = p;
+//	input.push_back(x);
+//	input.push_back(y);
+//	input.push_back(z);
 	input.push_back(1);
 	xform P = current_xform;
 	point PP = t.multiply_point(P,input);	
@@ -61,6 +60,19 @@ point point_pipeline(float x, float y, float z){
 	point PP2 = t.multiply_point(P2, PP1);
 	xform P3 = C2D;
 	point PP3 = t.multiply_point(P3, PP2);
+	if(PP3[3] > 1){
+		PP3[0] = PP3[0]/PP3[3];
+		PP3[1] = PP3[1]/PP3[3];
+		PP3[2] = PP3[2]/PP3[3];
+		PP3[3] = PP3[3]/PP3[3];
+	}
+	DB("to make point",-2);
+	float to_draw[3] = {PP3[0], PP3[1],PP3[2]};
+	DB("made point",-2);
+
+	DB("point 2: " << PP3[0] << " " << PP3[1] << " " << PP3[2] << " " << PP3[3],-2);
+	REDirect r;
+	r.rd_point(to_draw);
 	return PP3;
 }
 	
@@ -399,6 +411,15 @@ int find_span(int &new_xs, int &new_xe, float y){
 
 int flood_fill(float xs, float xe, float y){
 	//	DB("passed: xs = " + to_string(xs) + " xe = " + to_string(xe) + " into flood");
+	for(int row = 0; row < display_Ysize; row++)
+		for(int col = 0; col < display_Xsize; col++)
+			current.frame_depth[row][col] =0
+
+	
+	
+	
+	
+	
 	float color[3] = {active.r_scale, active.g_scale, active.b_scale};
 	int new_xs, new_xe;
 	for(int x = 0; x < display_xSize; x++){

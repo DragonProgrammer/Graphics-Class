@@ -7,9 +7,9 @@ class objects{
 		void draw_cube();
 
 		void draw_sphere(int radius);
-//		void draw_cone();
-//		void draw_cylinder();
-//		void draw_disk();
+		void draw_cone(int radius, int hieght);
+		void draw_cylinder(int radius, int base, int top );
+		void draw_disk(int radius, int height);
 };
 #endif
 

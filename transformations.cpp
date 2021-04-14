@@ -88,29 +88,47 @@ typedef vector<float> point; // 3 item vector
 
 	xform transforms::rotate_xy(double theta){
 		xform rmatrix = identity();
+		theta = theta*(3.1415926/180);
+		
+		
 		rmatrix[0][0] = cos(theta);
 		rmatrix[1][1] = cos(theta);
 		rmatrix[0][1] = -sin(theta);
 		rmatrix[1][0] = sin(theta);
+	//	if(theta < 0){
+	//	rmatrix[0][1] = sin(theta);
+	//	rmatrix[1][0] = -sin(theta);
+	//	}
+			
 	return rmatrix;
 	}
 
 
 	xform transforms::rotate_yz(double theta){
 		xform rmatrix = identity();
+		theta = theta*(3.1415926/180);
 		rmatrix[2][2] = cos(theta);
 		rmatrix[1][1] = cos(theta);
 		rmatrix[2][1] = sin(theta);
 		rmatrix[1][2] = -sin(theta);
+	//	if(theta < 0){
+	//	rmatrix[2][1] = -sin(theta);
+	//	rmatrix[1][2] = sin(theta);
+	//	}
 	return rmatrix;
 	}
 
 	xform transforms::rotate_xz(double theta){
 		xform rmatrix = identity();
+		theta = theta*(3.1415926/180);
 		rmatrix[0][0] = cos(theta);
 		rmatrix[2][2] = cos(theta);
 		rmatrix[0][2] = sin(theta);
 		rmatrix[2][0] = -sin(theta);
+	//	if(theta < 0){
+	//	rmatrix[0][2] = -sin(theta);
+	//	rmatrix[2][0] = sin(theta);
+	//	}
 	return rmatrix;
 	}
 
