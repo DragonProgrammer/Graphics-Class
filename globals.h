@@ -59,6 +59,17 @@ extern void push(xform x1);
 extern point point_pipeline(point p);
 extern void line_pipeline(point p1, char FLAG);
 
+/******************************assign 3****************/
+extern vector<float> BC0, BC1;
+//extern int[] borders_crossed[6];
+extern float clip_amount1, clip_amount2;
+extern point old_point, new_point;
 
+extern int compute_point(point in_question);
+extern int clip_line(point input);
+extern vector<float> compute_boundary_corridinate(point p);
+extern vector<int> compute_boundary_code(vector<float> input);
+extern int viewable(vector<int> b1, vector<int> b2);
+extern void compute_new_points();
 #endif
 

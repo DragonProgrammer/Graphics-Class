@@ -389,6 +389,14 @@ DB( "in point", 10);
 	pigment[2] = active.b_scale;
 //	set_pixel(to_plot[0], to_plot[1]);
 //	rd_write_pixel(to_plot[0], to_plot[1], pigment);
+
+	point p1;
+	p1.push_back(p[0]);
+	p1.push_back(p[1]);
+	p1.push_back(p[2]);
+//	if(compute_point(p1) == -1)
+//		return RD_OK;
+DB( p[0] << " " << p[1] << " " << p[2], 10);
 	set_pixel(p[0], p[1]);
 DB( "set pixel", 10);
 	rd_write_pixel(p[0], p[1], pigment);

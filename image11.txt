@@ -117,14 +117,14 @@ CameraUp 0 1 0
 
 FrameBegin 1
 WorldBegin
-XformPush
-Scale -0.03 -0.05 -1  #.03 -.05 -1 
-Translate -50 0 0
-ObjectInstance "Magic"
-XformPop
+#XformPush
+#Scale -0.03 -0.05 -1  #.03 -.05 -1 
+#Translate -50 0 0
+#ObjectInstance "Magic"
+#XformPop
 
-Translate -5 0 0
-#Disk 0 2 30
+#Translate -5 0 0
+Disk 0 2 30
 
 
 Point 450 625 0
