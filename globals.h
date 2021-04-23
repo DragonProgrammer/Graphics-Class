@@ -25,7 +25,7 @@ extern void set_back(float color[3]);
 int get_next_id();
 extern Frame set_frame(int id);
 extern color get_color(int x, int y);
-extern void set_pixel(int x, int y);
+extern void set_pixel(int x, int y, float z);
 extern void set_frame_image();
 extern color color_scale(color digits_input);
 extern color color_convert(color scale_input);
@@ -55,6 +55,8 @@ extern vector<xform> xform_stack;
 
 extern xform pop();
 extern void push(xform x1);
+
+extern void draw_depth(point p);
 
 extern point point_pipeline(point p);
 extern void line_pipeline(point p1, char FLAG);

@@ -58,6 +58,32 @@ xform C2D;
 vector<xform> xform_stack;
 
 
+void draw_depth(point p){
+	float color[3];
+	color[0] = active.r_scale;	
+	color[1] = active.g_scale;	
+	color[2] = active.b_scale;
+	int middle = display_xSize/2;
+	if(p[1] == middle || (middle < p[1] && middle+1 > p[1]) || (middle > p[1] && middle-1 < p[1]))
+		DB(p[2], -2);	
+	if(compute_point(p) == -1)
+		return;
+	if(current.frame_depth[p[0]][p[1]] > p[2]){
+		set_pixel(p[0], p[1], p[2]);
+		rd_write_pixel(p[0], p[1], color);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
 point point_pipeline(point p){
 	transforms t;
 	point input = p;
@@ -81,13 +107,11 @@ point point_pipeline(point p){
 		PP3[2] = PP3[2]/PP3[3];
 		PP3[3] = PP3[3]/PP3[3];
 	}
-	DB("to make point",-2);
-	float to_draw[3] = {PP3[0], PP3[1],PP3[2]};
-	DB("made point",-2);
+	DB("to make point",2);
+	DB("made point",2);
 
-	DB("point 2: " << PP3[0] << " " << PP3[1] << " " << PP3[2] << " " << PP3[3],-2);
-	REDirect r;
-		r.rd_point(to_draw);
+	DB("point 2: " << PP3[0] << " " << PP3[1] << " " << PP3[2] << " " << PP3[3],2);
+	draw_depth(PP3);
 	return PP3;
 }
 	
@@ -125,19 +149,20 @@ void line_pipeline(point p1, char FLAG){
 
 /***********changes for assignment 3 ****************/
 		new_point = P;
-		int is_clipping = clip_line(P);
-		DB(is_clipping, 2);
-	
+	//	int is_clipping = clip_line(P);
+	//	DB(is_clipping, 2);
+	//	if(is_clipping == -1)
+	//		return;
 		// set to points to device
 		T = C2C;
 		DB("\ncamer to clip",-1);
 		DBM(T, -1);
 
-		point P2 = t.multiply_point(T, new_point); //curent point, new_point was P
+		point P2 = t.multiply_point(T, P ); //curent point, new_point was P
 		point P1 = t.multiply_point(T, last_point); //saved point
 
-		last_point = new_point; //was =P
-if(is_clipping != -1){
+		last_point = P; //was =P
+//if(is_clipping != -1){
 /**************************************************************/	
 	
 	DB("C2C point 1: " << P1[0] << " " << P1[1] << " " << P1[2] << " " << P1[3],-1);
@@ -171,11 +196,12 @@ if(is_clipping != -1){
  		int x1 = P1[0], x2 = P2[0];
  	//	int x1 = last_point[0], x2 = input[0];
  		int y1 = P1[1], y2 = P2[1];
-		int z1 = P1[2], z2 = P2[2];
+		float z1 = P1[2], z2 = P2[2];
  	//	int y1 = last_point[1], y2 = input[1];
-		int xchan = x2-x1, ychan = y2-y1, zchan = z2-z1;
-	DB("Line point 1: " << x1 << " " << y1 << " " << P1[2] << " " << P1[3],-2);
+		float xchan = x2-x1, ychan = y2-y1, zchan = z2-z1;
+	DB("\nLine point 1: " << x1 << " " << y1 << " " << P1[2] << " " << P1[3],-2);
 	DB("Line point 2: " << x2 << " " << y2 << " " << P2[2] << " " << P2[3],-2);
+		DB("changes " << xchan << "    " << ychan << "     " << zchan, -2);
  		DB("piont 1: " << x1 << " " << y1,10);	
  		DB("piont 2: " << x2 << " " << y2,10);	
 /*
@@ -190,76 +216,112 @@ if(is_clipping != -1){
 			ychan = y2-y1;
 		}
 */
+
+		int no_chan_y = 0, no_chan_x = 0, no_chan_z = 0, end_draw=0;
 		float x0 =float(x1), y0 =float(y1), z0 = float(z1);
 		int steps;
 		float incX, incY, incZ;
+		point p;
+		p.push_back(0);
+		p.push_back(0);
+		p.push_back(0);
+		
+		if(ychan == 0){ no_chan_y = 1;}
+		if(xchan == 0){ no_chan_x = 1;}
+		if(zchan == 0){ no_chan_z = 1;}
+		end_draw = no_chan_x + no_chan_y + no_chan_z;
+		DB("no x: " << no_chan_x << " no y: " << no_chan_y << " no z: " << no_chan_z << " end: " <<end_draw, -2); 
+		if(end_draw == 3) {return;}
+		
+		
+		
 		if(abs(ychan) ==0 && abs(zchan) ==0){
-			while(x0 != x2){
+		DB("no change in Z",-2);
 				steps = abs(xchan);
 				incX = float(xchan)/float(steps);
-				float to_draw[3] = {float(x0), float(y0),float(z0)}; // assuming Z = 0
-				r.rd_point(to_draw);
+			while(x0 != x2){
+				p[0] = x0;
+				p[1] = y0;
+				p[2] = z0;
+				draw_depth(p);
 				x0 += incX;
 			}
 		}	
 		else if(abs(xchan) ==0 && abs(zchan) ==0){
-			while(y0 != y2){
+		DB("no change in Z",-2);
 				steps = abs(ychan);
 				incY = float(ychan)/float(steps);
-				float to_draw[3] = {float(x0), float(y0),float(z0)}; // assuming Z = 0
-				r.rd_point(to_draw);
+			while(y0 != y2){
+				p[0] = x0;
+				p[1] = y0;
+				p[2] = z0;
+				draw_depth(p);
 				y0 += incY;
 			}
 		}	
 		else if(abs(xchan) ==0 && abs(ychan) ==0){
-			while(y0 != y2){
+		DB("only change in Z",-2);
 				steps = abs(zchan);
 				incZ = float(zchan)/float(steps);
-				float to_draw[3] = {float(x0), float(y0),float(z0)}; // assuming Z = 0
-				r.rd_point(to_draw);
+			while(y0 != y2){
+				p[0] = x0;
+				p[1] = y0;
+				p[2] = z0;
+				draw_depth(p);
 				z0 += incZ;
 			}
 		}	
 		else if(abs(xchan) >= abs(ychan)  && abs(xchan) >= abs(zchan)){
-			while(x0 != x2 && y0 != y2){
+		DB("xchange bigest",-2);
+		
 				steps = abs(xchan);
 				incY = float(ychan)/float(steps);
 				incX = float(xchan)/float(steps);
 				incZ = float(zchan)/float(steps);
-
-				float to_draw[3] = {float(x0), float(y0),float(z0)}; // assuming Z = 0
-				r.rd_point(to_draw);
+		DB(x0 << " " << x2 << "     " << y0 << " " << y2,-2);
+		//	while(x0 != x2 && y0 != y2){
+			for(int s = 0; s <= steps; s++){
+				p[0] = x0;
+				p[1] = y0;
+				p[2] = z0;
+				draw_depth(p);
 				x0 += incX;
 				y0 += incY;
 				z0 += incZ;
-			}
+		}
 		}	
 		else if(abs(ychan) >= abs(xchan)  && abs(ychan) >= abs(zchan)){
-			while(x0 != x2 && y0 != y2){
+		DB("ychange bigest",-2);
 				steps = abs(ychan);
 				incY = float(ychan)/float(steps);
 				incX = float(xchan)/float(steps);
 				incZ = float(zchan)/float(steps);
-				float to_draw[3] = {float(x0), float(y0),float(z0)}; // assuming Z = 0
-				r.rd_point(to_draw);
+			for(int s = 0; s <= steps; s++){
+				p[0] = x0;
+				p[1] = y0;
+				p[2] = z0;
+				draw_depth(p);
 				x0 += incX;
 				y0 += incY;
 				z0 += incZ;
 				}
 		}	
 		else if(abs(zchan) >= abs(xchan)  && abs(zchan) >= abs(ychan)){
-			while(x0 != x2 && y0 != y2){
+		DB("zchange bigest",-2); // this one only comes up if major error
 				steps = abs(zchan);
 				incY = float(ychan)/float(steps);
 				incX = float(xchan)/float(steps);
 				incZ = float(zchan)/float(steps);
-				float to_draw[3] = {float(x0), float(y0),float(z0)}; // assuming Z = 0
-				r.rd_point(to_draw);
+			while(x0 != x2 && y0 != y2){
+				p[0] = x0;
+				p[1] = y0;
+				p[2] = z0;
+				draw_depth(p);
 				x0 += incX;
 				y0 += incY;
 				z0 += incZ;
 				}
-		}	
+//		}	
 				
 				
 				
@@ -311,11 +373,13 @@ int clip_line(point input){
 	vector<int> code_vector1 = compute_boundary_code(BC0);
 	vector<int> code_vector2 = compute_boundary_code(BC1);
 	int flag = viewable(code_vector1, code_vector2);
-	if(flag != 1)
+	if(flag != 1){
 		DB("flag " << flag,-2);
 		return flag; //-1 = reject line, 0 = do normaly
+}
 	for(int i =0; i < 6; i++){
 		float a;
+		DB("in math loop", 2);
 		a = BC0[i]/(BC0[i]-BC1[i]);
 		if(code_vector1[i] == 1){
 		       if(clip_amount1 < a){
@@ -329,6 +393,8 @@ int clip_line(point input){
 //		DB("clipp amount error", -2);
 //		return -1;
 //	}
+
+DB("out of math loop",-2);
 	compute_new_points();
 	
 
@@ -337,8 +403,10 @@ int clip_line(point input){
 void compute_new_points(){
 	point PM;
 	float c;
+	DB("in compute point",-2);
 	for(int i =0; i <4; i++){
 		c = last_point[i] - new_point[i];
+		//c = new_point[i] - last_point[i];
 		PM.push_back(c);
 	}
 	DB("PM: " <<PM[0] << " " <<PM[1] << " " <<PM[2] << " " <<PM[3],-2);
@@ -349,10 +417,19 @@ void compute_new_points(){
 	c = PM[i] *clip_amount2;
 	PA1.push_back(c);
 	}
-	for(int i =0; i < 4; i++){
-		new_point[i] = new_point[i] + PA0[i];
+	if(compute_point(last_point) == -1){ // last point is outside
+		for(int i =0; i < 4; i++){
+			last_point[i] = last_point[i] + PA0[i];
+			//new_point[i] = new_point[i] + PA0[i];
+		}
+	DB("clipped point a: " <<last_point[0] << " " <<last_point[1] << " " <<last_point[2] << " " <<last_point[3],-2);
 	}
-	DB("clipped point : " <<new_point[0] << " " <<new_point[1] << " " <<new_point[2] << " " <<new_point[3],-2);
+	if(compute_point(new_point) == -1){
+	for(int i =0; i < 4; i++){
+		new_point[i] = new_point[i] + PA1[i];
+	}
+	DB("clipped point b: " <<new_point[0] << " " <<new_point[1] << " " <<new_point[2] << " " <<new_point[3],-2);
+	}
 }
 
 	
@@ -387,7 +464,7 @@ int viewable(vector<int> b1, vector<int> b2){
 	int flag = 0;
 	DB("1: " << b1[0] << " " << b1[1] << " "	<< b1[2] << " "	<< b1[3] << " "	<< b1[4] << " "	<< b1[5], -2);
 	DB("2: " << b2[0] << " " << b2[1] << " "	<< b2[2] << " "	<< b2[3] << " "	<< b2[4] << " "	<< b2[5], -2);
-	for(int i = 0; i < b1.size(); i++){
+	for(int i = 0; i < 4; i++){
 		if(b1[i] == b2[i] && b1[i] == 1)
 			return -1; // fully out of view
 		if(b1[i] != b2[i])
@@ -430,12 +507,19 @@ background.r_scale = color[0];
 	background = color_convert(background);
 	DB("bacground in " <<background, 10);
 }
-void set_pixel(int x, int y){
+void set_pixel(int x, int y, float z){
 	DB("in set pixel", 10);	
 //	cout << to_string(x) + " " + to_string(y) << endl;
 	DB(x << " " << y,10);
 	DB( "color before "<<  current.frame_image[x][y],10);
-	current.frame_image[int(x)][int(y)]=active;
+	DB(x << "   " << y << "  " << z << "      " << current.frame_depth[x][y], 2);
+	if(current.frame_depth[x][y] < z){
+		return;
+	}
+	else{
+		current.frame_image[int(x)][int(y)]=active;
+		current.frame_depth[x][y] = z;
+	}
 	DB("I set the pixel", 10);	
 
 //	DB("color after" << current.frame_image[x][y]);
@@ -455,16 +539,21 @@ Frame set_frame(int id){
 		background = color_convert(background);
 		Frame temp = Frame(background);
 		vector<color> yline;
+		vector<float> yDepth;
 		for(int y = 0; y< display_ySize; y++){
 
 			yline.push_back(background);
+			yDepth.push_back(1.0);
 		}
+		vector< vector<float> > depth;
 		vector< vector<color> >  xline;
 		for(int x = 0; x< display_xSize; x++){
-			xline.push_back(yline);	
+			xline.push_back(yline);
+			depth.push_back(yDepth);	
 		}
 	DB("Size = " << display_ySize << " " <<display_xSize, 10);
 	temp.frame_image = xline;
+	temp.frame_depth = depth;
 	temp.set_id(id);
 //		frame_ids.push_back(id);
 		current_id = id;
@@ -604,7 +693,7 @@ int flood_fill(float xs, float xe, float y){
 		//rd_display_  set pixel command
 		
 		
-		set_pixel(x, y);
+		set_pixel(x, y, 0);// this will cause problems in flood fill
 		rd_write_pixel(x, y, pigment);
 		
 		}

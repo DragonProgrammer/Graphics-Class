@@ -42,11 +42,13 @@ if(Camera_View == 0)
 	Camera_View = 90;
 camera_near = 1.0;
 camera_far = 1000000000.0;
-if(camera_up.size() != 3){
+if(camera_up.size() != 3)
 camera_up = {0, 1.0, 0};
+if(at_point.size() != 3)
 at_point = {0,0,-1.0};
+if(camera_eye.size() != 3)
 camera_eye = {0,0,0};
-}
+
 
 DB("Made Camera elements", 2);
 W2C = t.world_to_camera(camera_eye, at_point, camera_up);
@@ -396,10 +398,11 @@ DB( "in point", 10);
 	p1.push_back(p[2]);
 //	if(compute_point(p1) == -1)
 //		return RD_OK;
+	p1 = point_pipeline(p1);
 DB( p[0] << " " << p[1] << " " << p[2], 10);
-	set_pixel(p[0], p[1]);
 DB( "set pixel", 10);
-	rd_write_pixel(p[0], p[1], pigment);
+
+
 	return RD_OK;
 }
 

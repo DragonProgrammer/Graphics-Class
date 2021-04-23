@@ -64,7 +64,7 @@ int pnm_end_display(void){
 
  int pnm_write_pixel(int x, int y, const float rgb []){
 //	cout << "pnm_write_pixel \n"<< endl;
-	set_pixel(x,y);
+//	set_pixel(x,y, 0); // this might also cause problems
 	 
 	 return RD_OK;
  }

@@ -4752,7 +4752,7 @@ CameraAt 0 100 -20
 CameraUp 0.2 0 1
 
 Clipping 1 1.0e+06
-
+FrameBegin 1
 WorldBegin
 
 XformPush
@@ -4807,4 +4807,4 @@ Scale 8000 8000 8000
 Sphere 1.0 -1.0 1.0 360.0
 
 WorldEnd
-
+FrameEnd

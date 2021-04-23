@@ -121,69 +121,68 @@ void objects::draw_cube() {
 
  void objects::draw_sphere(int radius){
 
-	float x, x2, y, y2;
+	float x, x2, x3, x4, y, y2, y3, y4, z, z2;
 	//	float codinate[3] = {x, y, 0};
 //DB("center " + to_string(xcenter) + " " + to_string(ycenter),10);
 DB( "radius :" << radius ,-2);
-int segments = 20;
+int segments = 20, steps =20;
 float theta, theta2;
-for(int i = 0; i< segments; i++){
-	theta = (float(i)/float(segments)) *2 * M_PI;
-	x = radius*sin(theta);
-	y = radius*cos(theta);
-	point spot;
-	vector<float> point;
-	point.push_back(x);
-	point.push_back(y);
-	point.push_back(0);
-	line_pipeline(point, 'M');
-	
-	theta2 = (float(i+1)/float(segments)) *2 * M_PI;
-	x2 = radius*sin(theta2);
-	y2 = radius*cos(theta2);
-	point[0] = x2;
-	point[1] = y2;
-	line_pipeline(point, 'D');
-}
-for(int i = 0; i< segments; i++){
-	theta = (float(i)/float(segments)) *2 * M_PI;
-	x = radius*sin(theta);
-	y = radius*cos(theta);
-	point spot;
-	vector<float> point;
-	point.push_back(0);
-	point.push_back(x);
-	point.push_back(y);
-	line_pipeline(point, 'M');
-	
-	theta2 = (float(i+1)/float(segments)) *2 * M_PI;
-	x2 = radius*sin(theta2);
-	y2 = radius*cos(theta2);
-	point[1] = x2;
-	point[2] = y2;
-	line_pipeline(point, 'D');
-}
-for(int i = 0; i< segments; i++){
-	theta = (float(i)/float(segments)) *2 * M_PI;
-	x = radius*sin(theta);
-	y = radius*cos(theta);
-	point spot;
-	vector<float> point;
-	point.push_back(x);
-	point.push_back(0);
-	point.push_back(y);
-	line_pipeline(point, 'M');
-	
-	theta2 = (float(i+1)/float(segments)) *2 * M_PI;
-	x2 = radius*sin(theta2);
-	y2 = radius*cos(theta2);
-	point[0] = x2;
-	point[2] = y2;
-	line_pipeline(point, 'D');
-}
-}
+float thetaJ, thetaJ2;
 
 
+
+for(int j = 0; j < steps; j++){
+	
+	for(int i = 0; i< segments; i++){
+		theta = (float(i)/float(segments)) *2 * M_PI;
+		thetaJ = (float(j)/float(steps)) * 2 * M_PI;
+	
+		theta2 = (float(i+1)/float(segments)) *2 * M_PI;
+		thetaJ2 = (float(j+1)/float(steps)) * 2 * M_PI;
+	
+		vector<float> point1, point2, point3, point4;
+	
+		y = radius*cos(thetaJ)*cos(theta);
+		x = radius*cos(thetaJ)*sin(theta);
+		z = radius*sin(thetaJ);
+	
+		y2 = radius*cos(thetaJ)*cos(theta2);
+		x2 = radius*cos(thetaJ)*sin(theta2);
+		z = radius*sin(thetaJ);
+		
+		y3 = radius*cos(thetaJ2)*cos(theta);
+		x3 = radius*cos(thetaJ2)*sin(theta);
+		z2 = radius*sin(thetaJ2);
+		
+		y4 = radius*cos(thetaJ2)*cos(theta2);
+		x4 = radius*cos(thetaJ2)*sin(theta2);
+		z2 = radius*sin(thetaJ2);
+		
+		point1.push_back(x);
+		point1.push_back(y);
+		point1.push_back(z);
+				
+		point2.push_back(x2);
+		point2.push_back(y2);
+		point2.push_back(z);
+		
+		point3.push_back(x3);
+		point3.push_back(y3);
+		point3.push_back(z2);
+		
+		point4.push_back(x4);
+		point4.push_back(y4);
+		point4.push_back(z2);
+		
+		line_pipeline(point1, 'M');
+		line_pipeline(point2, 'D');
+		line_pipeline(point4, 'D');
+		line_pipeline(point3, 'D');
+		line_pipeline(point1, 'D');
+	
+	}
+}
+}
  void objects::draw_cone(int radius, int hieght){
 int segments = 20;
 float theta, theta2;

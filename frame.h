@@ -7,7 +7,7 @@ class Frame{
 	int frame_id;
 
 	public:
-
+	vector< vector<float> > frame_depth;
 	vector< vector<color> > frame_image;
 	void set_id(int id);
 		
