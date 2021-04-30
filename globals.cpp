@@ -64,14 +64,17 @@ void draw_depth(point p){
 	color[1] = active.g_scale;	
 	color[2] = active.b_scale;
 	int middle = display_xSize/2;
-	if(p[1] == middle || (middle < p[1] && middle+1 > p[1]) || (middle > p[1] && middle-1 < p[1]))
-		DB(p[2], -2);	
 	if(compute_point(p) == -1)
 		return;
+
+DB( "depth frame size " <<  current.frame_depth.size(), 2);
+DB( "current dept " <<  current.frame_depth[p[0]][p[1]] << " test depth "<<  p[2], 2);
 	if(current.frame_depth[p[0]][p[1]] > p[2]){
+DB("point is forward", 2 );
 		set_pixel(p[0], p[1], p[2]);
 		rd_write_pixel(p[0], p[1], color);
 	}
+DB("point drawn " << p[0] << " " << p[1] << " " << p[2], 2 );
 }
 
 
@@ -113,7 +116,14 @@ point point_pipeline(point p){
 	DB("point 2: " << PP3[0] << " " << PP3[1] << " " << PP3[2] << " " << PP3[3],2);
 	draw_depth(PP3);
 	return PP3;
+
 }
+
+
+
+
+
+point p1_before, p2_before;
 	
 void line_pipeline(point p1, char FLAG){
 	REDirect r;
@@ -149,27 +159,38 @@ void line_pipeline(point p1, char FLAG){
 
 /***********changes for assignment 3 ****************/
 		new_point = P;
-	//	int is_clipping = clip_line(P);
+		p1_before = last_point;
+		p2_before = new_point;
+		int is_clipping = clip_line(P);
 	//	DB(is_clipping, 2);
 	//	if(is_clipping == -1)
 	//		return;
 		// set to points to device
+
+		point clip_bypass1, clip_bypass2;
+		clip_bypass1 = p1_before;
+		clip_bypass2 = p2_before;
+
 		T = C2C;
 		DB("\ncamer to clip",-1);
 		DBM(T, -1);
+		point P2 = t.multiply_point(T, clip_bypass2 ); 
+		point P1 = t.multiply_point(T, clip_bypass1 );
 
-		point P2 = t.multiply_point(T, P ); //curent point, new_point was P
-		point P1 = t.multiply_point(T, last_point); //saved point
-
+	//	point P2 = t.multiply_point(T, new_point ); //curent point, new_point was P
+	//	point P1 = t.multiply_point(T, last_point); //saved point
+DB("outside, compute new poit",2);
+	DB("clipped point a: " <<last_point[0] << " " <<last_point[1] << " " <<last_point[2] << " " <<last_point[3],2);
+	DB("clipped point b: " <<new_point[0] << " " <<new_point[1] << " " <<new_point[2] << " " <<new_point[3],2);
 		last_point = P; //was =P
 //if(is_clipping != -1){
 /**************************************************************/	
 	
 	DB("C2C point 1: " << P1[0] << " " << P1[1] << " " << P1[2] << " " << P1[3],-1);
 	DB("C2C point 2: " << P2[0] << " " << P2[1] << " " << P2[2] << " " << P2[3],-1);
-		DB("Clip to divice",-1);
+	DB("Clip to divice",-1);
 		T = C2D;
-		DBM(T, -1);
+	DBM(T, -1);
 		
 	
 		P1 = t.multiply_point(T, P1); //curent point
@@ -199,12 +220,21 @@ void line_pipeline(point p1, char FLAG){
 		float z1 = P1[2], z2 = P2[2];
  	//	int y1 = last_point[1], y2 = input[1];
 		float xchan = x2-x1, ychan = y2-y1, zchan = z2-z1;
+		
+
+//		p1_before = P1;
+//		p2_before = P2;
+//		compute_new_points();
+	
 	DB("\nLine point 1: " << x1 << " " << y1 << " " << P1[2] << " " << P1[3],-2);
 	DB("Line point 2: " << x2 << " " << y2 << " " << P2[2] << " " << P2[3],-2);
-		DB("changes " << xchan << "    " << ychan << "     " << zchan, -2);
- 		DB("piont 1: " << x1 << " " << y1,10);	
- 		DB("piont 2: " << x2 << " " << y2,10);	
-/*
+
+	DB("changes " << xchan << "    " << ychan << "     " << zchan, -2);
+	DB("piont 1: " << x1 << " " << y1,10);	
+ 	DB("piont 2: " << x2 << " " << y2,10);	
+
+	
+	/*
 		if( xchan < 0){
 			DB("flipped",0);
 			x2 = P1[0]; 
@@ -217,7 +247,6 @@ void line_pipeline(point p1, char FLAG){
 		}
 */
 
-		int no_chan_y = 0, no_chan_x = 0, no_chan_z = 0, end_draw=0;
 		float x0 =float(x1), y0 =float(y1), z0 = float(z1);
 		int steps;
 		float incX, incY, incZ;
@@ -226,17 +255,11 @@ void line_pipeline(point p1, char FLAG){
 		p.push_back(0);
 		p.push_back(0);
 		
-		if(ychan == 0){ no_chan_y = 1;}
-		if(xchan == 0){ no_chan_x = 1;}
-		if(zchan == 0){ no_chan_z = 1;}
-		end_draw = no_chan_x + no_chan_y + no_chan_z;
-		DB("no x: " << no_chan_x << " no y: " << no_chan_y << " no z: " << no_chan_z << " end: " <<end_draw, -2); 
-		if(end_draw == 3) {return;}
-		
+		DB("hieght " << display_ySize,-2);
 		
 		
 		if(abs(ychan) ==0 && abs(zchan) ==0){
-		DB("no change in Z",-2);
+		DB("no change in Z",2);
 				steps = abs(xchan);
 				incX = float(xchan)/float(steps);
 			while(x0 != x2){
@@ -248,7 +271,7 @@ void line_pipeline(point p1, char FLAG){
 			}
 		}	
 		else if(abs(xchan) ==0 && abs(zchan) ==0){
-		DB("no change in Z",-2);
+		DB("no change in Z",2);
 				steps = abs(ychan);
 				incY = float(ychan)/float(steps);
 			while(y0 != y2){
@@ -260,7 +283,7 @@ void line_pipeline(point p1, char FLAG){
 			}
 		}	
 		else if(abs(xchan) ==0 && abs(ychan) ==0){
-		DB("only change in Z",-2);
+		DB("only change in Z",2);
 				steps = abs(zchan);
 				incZ = float(zchan)/float(steps);
 			while(y0 != y2){
@@ -272,7 +295,7 @@ void line_pipeline(point p1, char FLAG){
 			}
 		}	
 		else if(abs(xchan) >= abs(ychan)  && abs(xchan) >= abs(zchan)){
-		DB("xchange bigest",-2);
+		DB("xchange bigest",2);
 		
 				steps = abs(xchan);
 				incY = float(ychan)/float(steps);
@@ -291,7 +314,7 @@ void line_pipeline(point p1, char FLAG){
 		}
 		}	
 		else if(abs(ychan) >= abs(xchan)  && abs(ychan) >= abs(zchan)){
-		DB("ychange bigest",-2);
+		DB("ychange bigest",2);
 				steps = abs(ychan);
 				incY = float(ychan)/float(steps);
 				incX = float(xchan)/float(steps);
@@ -307,7 +330,7 @@ void line_pipeline(point p1, char FLAG){
 				}
 		}	
 		else if(abs(zchan) >= abs(xchan)  && abs(zchan) >= abs(ychan)){
-		DB("zchange bigest",-2); // this one only comes up if major error
+		DB("zchange bigest",2); // this one only comes up if major error
 				steps = abs(zchan);
 				incY = float(ychan)/float(steps);
 				incX = float(xchan)/float(steps);
@@ -357,6 +380,17 @@ int compute_point(point in_question){
 	return -1;
 }
 
+int compute_point(vector<int> inquestion){
+	for( auto i : inquestion){
+		if( i == 1) // i is outside a boundrry
+			return -1;
+	}
+	return 1;
+}
+
+
+vector<int> code_vector1, code_vector2;
+
 int clip_line(point input){
 	point p1 = last_point;
 	point p2 = input;
@@ -366,70 +400,107 @@ int clip_line(point input){
 	new_point = p2;
 	BC0 = compute_boundary_corridinate(p1);
 	BC1 = compute_boundary_corridinate(p2);
-	DB("Pre-clip 1: " << p1[0] << " " << p1[1] << " " << p1[2] << " " << p1[3],-2);
-	DB("Pre-clip 2: " << p2[0] << " " << p2[1] << " " << p2[2] << " " << p2[3],-2);
-	DB("1: " << BC0[0] << " " << BC0[1] << " "<< BC0[2] << " "<< BC0[3] << " "<< BC0[4] << " "<< BC0[5], 2);
-	DB("2: " << BC1[0] << " " << BC1[1] << " "<< BC1[2] << " "<< BC1[3] << " "<< BC1[4] << " "<< BC1[5], 2);
-	vector<int> code_vector1 = compute_boundary_code(BC0);
-	vector<int> code_vector2 = compute_boundary_code(BC1);
+DB("Pre-clip 1: "<< p1[0] << " " << p1[1] << " " << p1[2] << " " << p1[3],-2);
+DB("Pre-clip 2: " << p2[0] << " " << p2[1] << " " << p2[2] << " " << p2[3],-2);
+DB("1: " << BC0[0] << " " << BC0[1] << " "<< BC0[2] << " "<< BC0[3] << " "<< BC0[4] << " "<< BC0[5], -2);
+DB("2: " << BC1[0] << " " << BC1[1] << " "<< BC1[2] << " "<< BC1[3] << " "<< BC1[4] << " "<< BC1[5], -2);
+	code_vector1 = compute_boundary_code(BC0);
+	code_vector2 = compute_boundary_code(BC1);
 	int flag = viewable(code_vector1, code_vector2);
 	if(flag != 1){
-		DB("flag " << flag,-2);
+DB("flag " << flag,-2);
 		return flag; //-1 = reject line, 0 = do normaly
 }
 	for(int i =0; i < 6; i++){
 		float a;
-		DB("in math loop", 2);
-		a = BC0[i]/(BC0[i]-BC1[i]);
-		if(code_vector1[i] == 1){
-		       if(clip_amount1 < a){
-		       		clip_amount1 = a;
-		       }
-		}		       
-		if(a < clip_amount2)
-			clip_amount2 = a;
+DB("in math loop", 2);
+		a = float(BC0[i])/(float(BC0[i])-float(BC1[i]));
+DB("BC0 " << BC0[i] << " BC1 " << BC1[i], -2);
+DB(i << " " << float(a),-2);
+		if(a < 1 && a > 0){
+			if(code_vector1[i] == 1){
+			       if(clip_amount1 < a){
+		       			clip_amount1 = float(a);
+		       		}
+			}		       
+			if(a < clip_amount2)
+				clip_amount2 = float(a);
+		}
 	}
 //	if(clip_amount1 > clip_amount2){
 //		DB("clipp amount error", -2);
 //		return -1;
 //	}
 
-DB("out of math loop",-2);
+DB("Clip amount 1 " << clip_amount1,-2);
+DB("Clip amount 2 " << clip_amount2,-2);
 	compute_new_points();
 	
 
 }
 
+point p1_after, p2_after;
+
+
+
+
 void compute_new_points(){
 	point PM;
 	float c;
-	DB("in compute point",-2);
+	p1_before = last_point;
+	p2_before = new_point;
+DB("Before a: " <<p1_before[0] << " " <<p1_before[1] << " " <<p1_before[2] << " " <<p1_before[3],-2);
+DB("in compute point",-2);
 	for(int i =0; i <4; i++){
-		c = last_point[i] - new_point[i];
-		//c = new_point[i] - last_point[i];
+//		c = last_point[i] - new_point[i];
+//		c = new_point[i] - last_point[i];
+		c = p2_before[i] - p1_before[i];
 		PM.push_back(c);
 	}
-	DB("PM: " <<PM[0] << " " <<PM[1] << " " <<PM[2] << " " <<PM[3],-2);
+DB("PM: " <<PM[0] << " " <<PM[1] << " " <<PM[2] << " " <<PM[3],-2);
 	point PA0, PA1;
 	for(int i =0; i <4; i++){
-	c = PM[i] *clip_amount1;
+	c = float(PM[i]) *clip_amount1;
 	PA0.push_back(c);
-	c = PM[i] *clip_amount2;
+	c = float(PM[i]) *clip_amount2;
 	PA1.push_back(c);
 	}
-	if(compute_point(last_point) == -1){ // last point is outside
+
+DB("PA0: " <<float(PA0[0]) << " " <<float(PA0[1]) << " " <<float(PA0[2]) << " " <<float(PA0[3]),-2);
+DB("PA1: " <<float(PA1[0]) << " " <<float(PA1[1]) << " " <<float(PA1[2]) << " " <<float(PA1[3]),-2);
+	p1_after = p1_before; // makes a point 
+	p2_after = p2_before; // makes a point 
+	if(compute_point(code_vector1) == -1){ // last point is outside
+DB("clipping last point",-2);
 		for(int i =0; i < 4; i++){
-			last_point[i] = last_point[i] + PA0[i];
-			//new_point[i] = new_point[i] + PA0[i];
+			p1_after[i] = p1_after[i] - PA0[i];
 		}
-	DB("clipped point a: " <<last_point[0] << " " <<last_point[1] << " " <<last_point[2] << " " <<last_point[3],-2);
+			if(p1_after[3] != 1){
+				p1_after[0] = p1_after[0]/p1_after[3];
+				p1_after[1] = p1_after[1]/p1_after[3];
+				p1_after[2] = p1_after[2]/p1_after[3];
+				p1_after[3] = p1_after[3]/p1_after[3];
+			}
+			//			new_point[i] = new_point[i] + PA0[i];
 	}
-	if(compute_point(new_point) == -1){
-	for(int i =0; i < 4; i++){
-		new_point[i] = new_point[i] + PA1[i];
+	if(compute_point(code_vector2) == -1){
+DB("clipping new point",-2);
+		for(int i =0; i < 4; i++){
+			p2_after[i] = p2_after[i] - PA1[i];
+		}	
+		if(p2_after[3] != 1){
+			p2_after[0] = p2_after[0]/p2_after[3];
+			p2_after[1] = p2_after[1]/p2_after[3];
+			p2_after[2] = p2_after[2]/p2_after[3];
+			p2_after[3] = p2_after[3]/p2_after[3];
+	//	last_point[i] = last_point[i] + PA1[i];
+		}
 	}
-	DB("clipped point b: " <<new_point[0] << " " <<new_point[1] << " " <<new_point[2] << " " <<new_point[3],-2);
-	}
+DB("clipped point a: " <<p1_after[0] << " " <<p1_after[1] << " " <<p1_after[2] << " " <<p1_after[3],-2);
+DB("clipped point b: " <<p2_after[0] << " " <<p2_after[1] << " " <<p2_after[2] << " " <<p2_after[3],-2);
+last_point = p1_after;
+new_point = p2_after;
+
 }
 
 	
@@ -554,6 +625,7 @@ Frame set_frame(int id){
 	DB("Size = " << display_ySize << " " <<display_xSize, 10);
 	temp.frame_image = xline;
 	temp.frame_depth = depth;
+	DB("Initial fram depth size " << temp.frame_depth.size(), 2);
 	temp.set_id(id);
 //		frame_ids.push_back(id);
 		current_id = id;
@@ -689,10 +761,17 @@ int flood_fill(float xs, float xe, float y){
 	
 	for( int x = xs; x < xe; x++){
 	//	DB( "fill :" +  to_string(x) + " " + to_string(y));
-		float point[3] = {x, y, 0};
+	//	float spot[3] = {x, y, 0};
 		//rd_display_  set pixel command
-		
-		
+	point p;
+	p.push_back(x);
+	p.push_back(y);
+	p.push_back(0);
+
+
+	if(compute_point(p) == -1)
+		return 0;
+
 		set_pixel(x, y, 0);// this will cause problems in flood fill
 		rd_write_pixel(x, y, pigment);
 		

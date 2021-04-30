@@ -15,17 +15,17 @@ using std::tan;
 typedef vector< vector<float> > xform; //4X4 matrix
 typedef vector<float> point; // 3 item vector
 
-	vector< xform > transformation_stack;
+vector< xform > transformation_stack;
 	
 
 
-	xform transforms::identity(){
+xform transforms::identity(){
 		return{ {1.0, 0, 0, 0},
 		       	{0, 1.0, 0, 0},
 			{0, 0, 1.0, 0},
 			{0, 0, 0, 1.0} }; }
 
-	xform transforms::multiply(xform x1, xform x2){
+xform transforms::multiply(xform x1, xform x2){
 //		cout << "In multipley" << endl;
 		xform prod = { {0, 0, 0, 0},
 				{0, 0, 0, 0},
@@ -50,7 +50,7 @@ typedef vector<float> point; // 3 item vector
 	}
 			
 	
-	point transforms::multiply_point(xform x1,  point a){
+point transforms::multiply_point(xform x1,  point a){
 		point after = {0, 0, 0, 0};
 		for(int row =0; row < 4; row++){
 			for(int elem =0; elem < 4; elem++){
@@ -67,7 +67,7 @@ typedef vector<float> point; // 3 item vector
 		
 	
 
-	xform transforms::translate( double x, double y, double z){
+xform transforms::translate( double x, double y, double z){
 		xform tmatrix = identity();
 		tmatrix[0][3] = x;
 		tmatrix[1][3] =y;
@@ -75,7 +75,7 @@ typedef vector<float> point; // 3 item vector
 	return tmatrix;
 	}
 	
-	xform transforms::scale(double x, double y, double z){
+xform transforms::scale(double x, double y, double z){
 		xform smatrix = identity();
 		smatrix[0][0] = x;
 		smatrix[1][1] =y;
@@ -86,7 +86,7 @@ typedef vector<float> point; // 3 item vector
 	
 
 
-	xform transforms::rotate_xy(double theta){
+xform transforms::rotate_xy(double theta){
 		xform rmatrix = identity();
 		theta = theta*(3.1415926/180);
 		
@@ -104,7 +104,7 @@ typedef vector<float> point; // 3 item vector
 	}
 
 
-	xform transforms::rotate_yz(double theta){
+xform transforms::rotate_yz(double theta){
 		xform rmatrix = identity();
 		theta = theta*(3.1415926/180);
 		rmatrix[2][2] = cos(theta);
@@ -118,7 +118,7 @@ typedef vector<float> point; // 3 item vector
 	return rmatrix;
 	}
 
-	xform transforms::rotate_xz(double theta){
+xform transforms::rotate_xz(double theta){
 		xform rmatrix = identity();
 		theta = theta*(3.1415926/180);
 		rmatrix[0][0] = cos(theta);
@@ -133,7 +133,7 @@ typedef vector<float> point; // 3 item vector
 	}
 
 
-	xform transforms::world_to_camera( point eye, point at, vector<float> up){
+xform transforms::world_to_camera( point eye, point at, vector<float> up){
 		cout << "in world to camera" << endl;
 		xform T1 = identity();
 		T1[0][3] = -eye[0];
@@ -145,25 +145,25 @@ typedef vector<float> point; // 3 item vector
 		for(int row =0; row < 4; row++){
 			for( int col = 0; col < 4; col++){
 				float elem1 = T1[row][col];
-				cout <<  elem1 << "      ";
+//				cout <<  elem1 << "      ";
 			}
-			cout << endl;
+//			cout << endl;
 		}
-		cout << "\nEye point" << endl;
-		for (auto v : eye){
-			cout << v << "  ";
-		}
-		cout << "\nAt point" << endl;
-		for (auto v : at){
-			cout << v << "  ";
-		}
+	//	cout << "\nEye point" << endl;
+	//	for (auto v : eye){
+	//		cout << v << "  ";
+	//	}
+	//	cout << "\nAt point" << endl;
+	///	for (auto v : at){
+	//		cout << v << "  ";
+	//	}
 
-		cout << "\nCamera up" << endl;
-		for (auto v : camera_up){
-			cout << v << "  ";
-		}
+	//	cout << "\nCamera up" << endl;
+	//	for (auto v : camera_up){
+	//		cout << v << "  ";
+	//	}
 
-		}
+	}
 		// get A
 		vector<float> A;
 		A.push_back(at[0]-eye[0]);
@@ -276,23 +276,23 @@ typedef vector<float> point; // 3 item vector
 		R1[2][0] =A[0];
 		R1[2][1] =A[1];
 		R1[2][2] =A[2];
-		cout << "\nMade Rotation" << endl;
+//		cout << "\nMade Rotation" << endl;
 
 		for(int row =0; row < 4; row++){
 			for( int col = 0; col < 4; col++){
 				float elem1 = R1[row][col];
-				cout <<  elem1 << "      ";
+//				cout <<  elem1 << "      ";
 			}
-			cout << endl;
+//			cout << endl;
 		}
 		xform end = multiply(T1,R1);
-		 cout << "multiplied matrices" << endl;
+//		 cout << "multiplied matrices" << endl;
 		for(int row =0; row < 4; row++){
 			for( int col = 0; col < 4; col++){
 				float elem1 = end[row][col];
-				cout <<  elem1 << "      ";
+//				cout <<  elem1 << "      ";
 			}
-			cout << endl;
+//			cout << endl;
 		}
 
 		return multiply(R1,T1);
@@ -306,10 +306,10 @@ typedef vector<float> point; // 3 item vector
 
 
 	
-	xform transforms::camera_to_clip( double fov, double near, double far, double aspect){
+xform transforms::camera_to_clip( double fov, double near, double far, double aspect){
 		xform c = identity();
-		cout << "aspect " << aspect << "     field of view " << fov << endl;
-		cout << "Near " << near << "     far " << far << endl;
+//		cout << "aspect " << aspect << "     field of view " << fov << endl;
+//		cout << "Near " << near << "     far " << far << endl;
 		float degrees = fov/2;
 		float pi = 3.1415926;
 		float radian = degrees * (pi/180);

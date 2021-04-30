@@ -64,10 +64,14 @@ extern void line_pipeline(point p1, char FLAG);
 /******************************assign 3****************/
 extern vector<float> BC0, BC1;
 //extern int[] borders_crossed[6];
+extern vector<int> code_vector1, code_vector2;
 extern float clip_amount1, clip_amount2;
 extern point old_point, new_point;
 
+extern point p1_before, p1_after, p2_before, p2_after;
+
 extern int compute_point(point in_question);
+extern int compute_point(vector<int> inquestion);
 extern int clip_line(point input);
 extern vector<float> compute_boundary_corridinate(point p);
 extern vector<int> compute_boundary_code(vector<float> input);

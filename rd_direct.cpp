@@ -396,8 +396,8 @@ DB( "in point", 10);
 	p1.push_back(p[0]);
 	p1.push_back(p[1]);
 	p1.push_back(p[2]);
-//	if(compute_point(p1) == -1)
-//		return RD_OK;
+	if(compute_point(p1) == -1)
+		return RD_OK;
 	p1 = point_pipeline(p1);
 DB( p[0] << " " << p[1] << " " << p[2], 10);
 DB( "set pixel", 10);
