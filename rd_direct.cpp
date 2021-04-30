@@ -110,7 +110,10 @@ int REDirect::rd_frame_begin(int frame_no)
 int REDirect::rd_frame_end(void)
 {
 DB("rd_frame_end",0);	
-
+DB("numer of rejected points " << draw_depth_reject, -2);
+for(auto p : rejects){
+	DB(p[0] << " " << p[1] << " " << p[2], 2);
+}
 //	if(current_id != frame_ids.back()){
 //		cout << "in check" <<endl;
 //	images.push_back(current);

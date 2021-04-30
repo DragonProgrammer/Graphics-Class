@@ -4763,7 +4763,7 @@ Rotate "Z" 90
 
 Scale 1000 1000 1000
 
-ObjectInstance "Constellation"
+#ObjectInstance "Constellation"
 
 XformPop
 

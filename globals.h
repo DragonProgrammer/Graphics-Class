@@ -57,7 +57,8 @@ extern xform pop();
 extern void push(xform x1);
 
 extern void draw_depth(point p);
-
+extern int draw_depth_reject;
+extern vector<point> rejects;
 extern point point_pipeline(point p);
 extern void line_pipeline(point p1, char FLAG);
 
