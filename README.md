@@ -23,18 +23,23 @@ ________________________________________________________________________________
 Images Made
 
 image1.txt:
+
   This is a pinwheel of different colored lines, visualy, going from the center of the images to the edges.
 
 image4.txt
+
   This one contains 2 sets of nested circles of different colors. The color pattern is reversed for each set of circles.
 
 image5.txt
+
   This is a series of crosed line of 2 diferent colors with the partitions they create filled in with different colors.
 
 image6.txt
+
   The image created heare is a set of concentric circles with the spaces between each filled with a different color. And then the background being changed.
 
 image7.txt
+
   This one also has a set of concentric circles filled as well. After which a set of lines bisect the circles, and the partitions around the edge are filled with different colors.
 __________________________________________________________________________________________________________________________________________________________________________________
 
