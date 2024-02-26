@@ -1,0 +1,267 @@
+Display "Card back" "Screen" "rgbdouble"
+Format 1000 1000
+
+ObjectBegin "Magic"
+PolySet "P"
+84 
+6
+0.0 26.0 0
+0.0 24.0 0
+2.0 24.0 0
+12.0 0.0 0
+18.0 0.0 0
+26.0 17.0 0
+36.0 0.0 0
+42.0 0.0 0
+52.0 24.0 0
+54.0 24.0 0
+54.0 26.0 0
+46.0 26.0 0
+46.0 24.0 0
+48.0 24.0 0
+39.0 2.0 0
+28.0 21.0 0
+30.0 24.0 0
+26.0 28.0 0
+15.0 3.0 0
+4.0 24.0 0
+6.0 24.0 0
+6.0 26.0 0
+
+# move A -4 in x
+58 18 0
+64 4 0
+66 6 0
+63 11 0
+70 10 0
+60 18 0
+
+63 0 0
+70 7 0
+74 18 0
+80 18 0
+68 0 0
+
+84 6 0
+90 0 0
+96 0 0
+99 3 0
+102 2 0
+101 6 0
+94 2 0
+92 2 0
+88 6 0
+88 14 0
+90 16 0
+94 16 0
+100 13 0
+98 10 0
+102 10 0
+102 18 0
+100 22 0
+100 16 0
+96 18 0
+90 18 0
+86 16 0
+84 10 0
+
+
+106 0 0
+119 0 0 
+117 1 0
+113 4 0
+113 14 0
+116 17 0
+112 16 0
+110 16 0
+106 18 0
+110 15 0
+110 4 0   
+
+
+122 8 0
+128 1 0
+134 1 0
+136 0 0
+138 0 0
+136 8 0
+136 3 0
+130 3 0
+126 6 0
+126 14 0
+130 16 0
+134 16 0
+#138 14 0
+144 14 0
+134 18 0
+128 18 0
+125 16 0
+123 13 0
+122 12 0
+
+
+0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 -1
+22 23 24 25 26 27 -1
+28 29 30 31 32 -1
+33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 -1
+55 56 57 58 59 60 61 62 63 64 65 -1
+66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 -1
+ObjectEnd
+
+
+
+ObjectBegin "Orbs"
+
+XformPush
+Scale .25 .25 .25
+Translate 0 -1 0
+Color 1 1 1 #white
+Sphere 1.0 -1.0 1.0 360.0
+XformPop
+XformPush
+Scale .25 .25 .25
+Translate 5 -15 0
+Color 1 0 0 #red
+Sphere 1.0 -1.0 1.0 360.0
+XformPop
+XformPush
+Scale .25 .25 .25
+Translate -5 -15 0
+Color 0.1 0.1 0.1 #black
+Sphere 1.0 -1.0 1.0 360.0
+XformPop
+XformPush
+Scale .25 .25 .25
+Translate 8 -7.5 0
+Color 0.3 0.9 0.3
+Sphere 1.0 -1.0 1.0 360.0
+XformPop
+XformPush
+Scale .25 .25 .25
+Translate -8 -7.5 0
+Color 0.3 0.8 1. #blue
+Sphere 1.0 -1.0 1.0 360.0
+XformPop
+
+ObjectEnd
+
+
+
+ObjectBegin "Text"
+XformPush
+Scale -0.03 -0.05 -1  #.03 -.05 -1 
+Translate -50 0 0
+Color 1 .1 0
+ObjectInstance "Magic"
+XformPop
+
+
+Point 450 625 0
+Point 535 571 0
+Point 623 606 0
+Point 639 596 0
+
+ObjectEnd
+
+
+CameraEye 0 -5 -5
+CameraAt 0 0 -1
+CameraUp 0 1 0
+
+FrameBegin 1
+WorldBegin
+
+XformPush
+Translate 0.1 1 0
+ObjectInstance "Text"
+XformPop
+
+Color .5 .6 .8 
+Fill 439 558 0
+Fill 519 542 0
+Fill 546 547 0
+Fill 593 546 0
+Fill 615 517 0
+Fill 643 534 0
+
+XformPush
+Translate -.5 -2 0
+Scale .3 .3 1
+ObjectInstance "Orbs"
+
+XformPop
+
+XformPush
+Color .1 .1 .6
+Scale .25 .25 .25
+
+XformPush
+Translate -2 -3.5 0
+Scale 4 7 1
+Disk 0 2 30
+XformPop
+
+XformPush
+Translate -2 -3.5 0
+Scale 4.1 7.1 1
+Disk 0 2 30
+XformPop
+XformPop
+
+
+
+Color .7 .5 .3
+Fill 468 633 0
+Fill 654 540 0
+
+
+
+Color 1 0.05 0.05 #red
+XformPush
+Translate 2.11 2.2 0  #TL
+Scale .25 .25 .25
+Sphere 1.0 -1.0 1.0 360.0
+XformPop
+
+XformPush
+Translate -3.83 2.2 0 #TR
+Scale .25 .25 .25
+Sphere 1.0 -1.0 1.0 360.0
+XformPop
+
+XformPush
+Translate .87 -4.32 0 #BL
+Scale .1 .1 .1
+Sphere 1.0 -1.0 1.0 360.0
+XformPop
+
+XformPush
+Translate -1.6 -4.33 0
+Scale .1 .1 .1
+Sphere 1.0 -1.0 1.0 360.0
+XformPop
+
+#     Botttom          Top
+ 
+Color .09 .09 .09
+
+Line 1.35 -4.5 .9    3.28 3.7 .1
+Line -2.15 -4.5 .9    -5.23 3.7 .1
+
+Line -5.23 3.7 .1    3.28 3.7 .1
+
+
+Color .5 .2 .0
+
+Line 1.15 -4.5 .9    2.69 3 .1
+Line -1.96 -4.5 .9    -4.55 3 .1
+
+#    Left             Right
+Line 2.69 3 .1    -4.55 3 .1
+Color .5 .3 .2
+Fill 385 511 0
+Fill 347 518 0
+#Fill 390 565 0 
+
+WorldEnd
+FrameEnd

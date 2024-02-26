@@ -42,13 +42,11 @@ if(Camera_View == 0)
 	Camera_View = 90;
 camera_near = 1.0;
 camera_far = 1000000000.0;
-if(camera_up.size() != 3)
+if(camera_up.size() != 3){
 camera_up = {0, 1.0, 0};
-if(at_point.size() != 3)
 at_point = {0,0,-1.0};
-if(camera_eye.size() != 3)
 camera_eye = {0,0,0};
-
+}
 
 DB("Made Camera elements", 2);
 W2C = t.world_to_camera(camera_eye, at_point, camera_up);
@@ -63,7 +61,7 @@ C2D = t.clip_to_device(display_xSize, display_ySize);
 
 DB("Made Clip to device", 2);
 //	if(current_id != -1){   //if there is a frame alredy
-//		:images.push_back(current); //put it into the vector if frames
+//		images.push_back(current); //put it into the vector if frames
 //	}
 
 //	int new_id = get_next_id();  // gets next unsused number for id
@@ -110,10 +108,7 @@ int REDirect::rd_frame_begin(int frame_no)
 int REDirect::rd_frame_end(void)
 {
 DB("rd_frame_end",0);	
-DB("numer of rejected points " << draw_depth_reject, -3);
-for(auto p : rejects){
-	DB(p[0] << " " << p[1] << " " << p[2], 2);
-}
+
 //	if(current_id != frame_ids.back()){
 //		cout << "in check" <<endl;
 //	images.push_back(current);
@@ -394,18 +389,9 @@ DB( "in point", 10);
 	pigment[2] = active.b_scale;
 //	set_pixel(to_plot[0], to_plot[1]);
 //	rd_write_pixel(to_plot[0], to_plot[1], pigment);
-
-	point p1;
-	p1.push_back(p[0]);
-	p1.push_back(p[1]);
-	p1.push_back(p[2]);
-	if(compute_point(p1) == -1)
-		return RD_OK;
-	p1 = point_pipeline(p1);
-DB( p[0] << " " << p[1] << " " << p[2], 10);
+	set_pixel(p[0], p[1]);
 DB( "set pixel", 10);
-
-
+	rd_write_pixel(p[0], p[1], pigment);
 	return RD_OK;
 }
 
@@ -445,7 +431,7 @@ int REDirect::rd_polyset(const string & vertex_type, int nvertex, const float * 
 
 	DB(face,-2);
 
-	DB("In Polyset",-3);
+
 	for(int lines = 0; lines < (nvertex*3); lines += 3){
 		DB(vertex[lines], 0);
 		point coord;
@@ -453,7 +439,7 @@ int REDirect::rd_polyset(const string & vertex_type, int nvertex, const float * 
 		coord.push_back(vertex[lines+1]);
 		coord.push_back(vertex[lines+2]);
 		point_set.push_back(coord);
-		DB("Points are: "<< vertex[lines] << " " << vertex[lines+1] << " " << vertex[lines+2], -0);
+		DB(vertex[lines] << " " << vertex[lines+1] << " " << vertex[lines+2], 0);
 			
 		}
 	vector< vector <int> > faces;
@@ -473,25 +459,22 @@ int REDirect::rd_polyset(const string & vertex_type, int nvertex, const float * 
 	point p2;
 	int vector_id;
 	vector<int> current_face;
-	for(int surface = 0; surface < nface; surface++){ // for each surface on polygon
-		current_face = faces[surface];
-		DB("Current face is: " << surface,-3);
-		vector_id = current_face[0];
-		start = point_set[vector_id];
-		int npoints = current_face.size();
-		vector_id = current_face[npoints-1];
-		p2 = point_set[vector_id];
-		line_pipeline(start, 'M');
-		for(int line = 1; line < npoints; line++){
-			vector_id = current_face[line];
-			p2 = point_set[vector_id];
-			DB("line " << line, -2);
-			line_pipeline(p2, 'D');
-			line_pipeline(p2, 'M');
+	for(int surface = 0; surface < nface; surface++){
+	current_face = faces[surface];
+	vector_id = current_face[0];
+	start = point_set[vector_id];
+	int npoints = current_face.size();
+	vector_id = current_face[npoints-1];
+	p2 = point_set[vector_id];
+	line_pipeline(start, 'M');
+	for(int line = 1; line < npoints; line++){
+	vector_id = current_face[line];
+	p2 = point_set[vector_id];
+	line_pipeline(p2, 'D');
 
-		}	
+	}
 	
-		line_pipeline(start, 'D');
+	line_pipeline(start, 'D');
 	
 	}
 
@@ -679,13 +662,11 @@ int REDirect::rd_k_specular(float Ks)
 
 int REDirect::rd_attribute_push(void)
 {
-	DB("CALLED AttrPush",-2);
 	return 0;
 }
 
 int REDirect::rd_attribute_pop(void)
 {
-	DB("CALLED AttrPop",-2);
 	return 0;
 }
 

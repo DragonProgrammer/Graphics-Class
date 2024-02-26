@@ -1,24 +1,25 @@
-#include "Debug.h"
-#include "objects.h"
+#define DEBUG
+#ifdef DEBUG
+#include <iostream>
+using std::cerr;
+using std::end;
+#define DB(x) do{cerr<<x<<endl;}while(0)
+#else
+#define DB(x) do{}while(0)
+#endif
+
 #include "rd_direct.h"
 #include <string>
-#include <cstring>
 #include "rd_display.h"
 #include "frame.h"
 #include "globals.h"
 #include "rd_error.h"
-#include <sstream>
 #include <iostream>
-#include <stdio.h>
 #include <vector>
-#include "transformations.h"
-using std::getline;
-using std::strtok;
 using std::string;
 using std::to_string;
 using std::cout;
 using std::endl;
-using std::stringstream;
 
 		/**********************   General functions  *******************************/
 int REDirect :: rd_display(const string & name, const string & type,  const string & mode){
@@ -33,37 +34,9 @@ int REDirect::rd_format(int xresolution, int yresolution)
 
 int REDirect::rd_world_begin(void)
 {
-transforms t;
-
-DB("world begin", 2);
-current_xform = t.identity();
-DB("Made identity", 2);
-if(Camera_View == 0)
-	Camera_View = 90;
-camera_near = 1.0;
-camera_far = 1000000000.0;
-if(camera_up.size() != 3)
-camera_up = {0, 1.0, 0};
-if(at_point.size() != 3)
-at_point = {0,0,-1.0};
-if(camera_eye.size() != 3)
-camera_eye = {0,0,0};
-
-
-DB("Made Camera elements", 2);
-W2C = t.world_to_camera(camera_eye, at_point, camera_up);
-DB("Made World to Camera", 2);
-
-DB("Aspect " << display_ySize << "/" << display_xSize, 0);
-double aspect = double(display_xSize)/double(display_ySize);
-DB(aspect,0);
-C2C = t.camera_to_clip(Camera_View, camera_near, camera_far, aspect);
-DB("Made Camera to clip", 2);
-C2D = t.clip_to_device(display_xSize, display_ySize);
-
-DB("Made Clip to device", 2);
+cout << "world begin" << endl;
 //	if(current_id != -1){   //if there is a frame alredy
-//		:images.push_back(current); //put it into the vector if frames
+//		images.push_back(current); //put it into the vector if frames
 //	}
 
 //	int new_id = get_next_id();  // gets next unsused number for id
@@ -76,28 +49,28 @@ DB("Made Clip to device", 2);
 	
 	//this presumes that rd_format (above) was called to give us size
 //	rd_frame_begin(1); // called from below
-DB("end world begin",0);
+
 	return rd_er;
 
 }
 
 int REDirect::rd_world_end(void)
 {
-DB("rd_world_end", 0);	
+DB("rd_world_end");	
 //	int error1 = rd_disp_end_display();
 //	DB(error1);
 	int error = rd_frame_end();
 //	DB(error);
 
 	
-	DB("end rd_world_end",0);	
+	DB("end rd_world_end");	
 //	exit(0);
 	return RD_OK;
 }
 
 int REDirect::rd_frame_begin(int frame_no)
 {
-	DB("rd_frame_begin",0);
+	DB("rd_frame_begin");
 	//this should change nothing
 //	if(current_id != frame_no){
 //		return-1;}
@@ -109,11 +82,8 @@ int REDirect::rd_frame_begin(int frame_no)
 
 int REDirect::rd_frame_end(void)
 {
-DB("rd_frame_end",0);	
-DB("numer of rejected points " << draw_depth_reject, -3);
-for(auto p : rejects){
-	DB(p[0] << " " << p[1] << " " << p[2], 2);
-}
+DB("rd_frame_end");	
+
 //	if(current_id != frame_ids.back()){
 //		cout << "in check" <<endl;
 //	images.push_back(current);
@@ -139,123 +109,72 @@ int REDirect::rd_render_cleanup(void)
 
 int REDirect::rd_camera_eye(const float eyepoint[3])
 {
-	vector<float> point;
-	
-	point.push_back(eyepoint[0]);
-	point.push_back(eyepoint[1]);
-	point.push_back(eyepoint[2]);
-	camera_eye = point;//might be set_camera_point
-	
 	return RD_OK;
 }
 
 int REDirect::rd_camera_at(const float atpoint[3])
 {
-	vector<float> point;
-	
-	point.push_back(atpoint[0]);
-	point.push_back(atpoint[1]);
-	point.push_back(atpoint[2]);
-	at_point = point;
-
-
 	return RD_OK;
 }
-
 
 int REDirect::rd_camera_up(const float up[3])
 {
-	vector<float> point;
-	
-	point.push_back(up[0]);
-	point.push_back(up[1]);
-	point.push_back(up[2]);
-	camera_up = point;
-
 	return RD_OK;
 }
-
+/*
 int REDirect::rd_camera_fov(float fov)
 {
-	Camera_View = fov;
-	return RD_OK;
+	return 0;
 }
 
 int REDirect::rd_clipping(float znear, float zfar)
 {
-	camera_near = znear;
-	camera_far = zfar;
-	return RD_OK;
+	return 0;
 }
  
- /**********************   Transformations **********************************/
-
+ /s**********************   Transformations **********************************/
+/*
 int REDirect::rd_translate(const float offset[3])
 {
-	DB("Prior xForm",-1);
-	DBM(current_xform,-1);
-	transforms t;
-	xform function = t.translate(double(offset[0]),double(offset[1]),double(offset[2]));
-	current_xform =t.multiply(current_xform, function);
-	DB("Translated xform",-1);
-	DBM(current_xform,-1);
-	return RD_OK;
+	return 0;
 }
 
 int REDirect::rd_scale(const float scale_factor[3])
 {
-	DB("Prior xform",-1);
-	DBM(current_xform,-1);
-	transforms t;
-	xform function = t.scale(double(scale_factor[0]),double(scale_factor[1]),double(scale_factor[2]));
-		current_xform = t.multiply(current_xform, function);
-	DB("Scaled xform",-1);
-	DBM(current_xform,-1);
-		return RD_OK;
+	return 0;
 }
 
 int REDirect::rd_rotate_xy(float angle)
 {
-	transforms t;
-	xform function = t.rotate_xy(angle);
-		current_xform = t.multiply(current_xform, function);
-		return RD_OK;
+	return 0;
 }
 
 int REDirect::rd_rotate_yz(float angle)
 {
-	transforms t;
-	xform function = t.rotate_yz(angle);
-		current_xform = t.multiply(current_xform, function);
-		return RD_OK;
+	return 0;
 }
 
 int REDirect::rd_rotate_zx(float angle)
 {
-	transforms t;
-	xform function = t.rotate_xz(angle);
-		current_xform = t.multiply(current_xform, function);
-		return RD_OK;
+	return 0;
 }
-/*
+
 int REDirect::rd_matrix(const float * mat)
 {
-	return RD_OK;
-}*/
+	return 0;
+}
 	       
 int REDirect::rd_xform_push(void)
 {
-	push(current_xform);
-	return RD_OK;
+	return 0;
 }
 
 int REDirect::rd_xform_pop(void)
 {
-	current_xform=pop(); 
-	return RD_OK;
+	return 0;
 }
 
-  /**********************   Geometric Objects  *******************************/
+  /i**********************   Geometric Objects  *******************************/
 /*
 
 int REDirect::rd_bezier_curve(const string & vertex_type, int degree, const float * vertex)
@@ -357,22 +276,60 @@ struct point {
 
 int REDirect::rd_line(const float start[3], const float end[3])
 {
-	DB("in line",0);
-	vector<float> point_input;
-	point_input.push_back(start[0]);
-	point_input.push_back(start[1]);
-	point_input.push_back(start[2]);
-	line_pipeline(point_input, 'M');	
+	int x1 = start[0], x2 =end[0];
+	int y1 = start[1], y2 =end[1];
+	int xchan = x2-x1, ychan = y2-y1;
+	if( xchan < 0){
+		DB("flipped");
+	x2 = start[0]; 
+	x1 =end[0];
+	y2 = start[1];
+       	y1 =end[1];
+	
+	xchan = x2-x1; 
+	ychan = y2-y1;
 	
 	
-	DB("did first pipline",2);
-	point_input.clear();
-	point_input.push_back(end[0]);
-	point_input.push_back(end[1]);
-	point_input.push_back(end[2]);
-	line_pipeline(point_input, 'D');	
+	}
+	int p0 = 2*ychan - xchan;
+	int inc_plower = 2*ychan, inc_pupper = 2*ychan -2*xchan;
+	if(y2 < y1) {
+		p0 = 2*xchan - ychan;
+		inc_plower = 2*xchan;
+		inc_pupper = 2*xchan - 2*ychan;
+	}
+	int x0 = x1, y0 = y1;
 	
-}	
+	DB("x1 = " + to_string(x1) + " x2 = " + to_string(x2) + " xchan = " + to_string(xchan));
+	DB("y1 = " + to_string(y1) + " y2 = " + to_string(y2) + " ychan = " + to_string(ychan));
+// 	DB("p0 = " + to_string(p0) + " plower = " + to_string(inc_plower) + " pupper = " + to_string(inc_pupper));
+	while(x0 <= x2){
+
+		float point[3] = {float(x0),float(y0), 0};
+		rd_point(point);
+		if(xchan > 0)
+			x0++;
+		if( p0 < 0)
+			p0 += inc_plower;
+		else{
+			if(ychan<0) {
+				y0--;
+			//	DB("y is negitive");
+				if(y0 < y2)
+					break;
+			}
+			else{
+				y0++;
+			//	DB("y is positive");
+				if(y0 > y2)
+					break;
+			}
+			p0 += inc_pupper;
+		}
+	}	
+//	cout << "in line" << endl;
+	return RD_OK;
+}
 /*
 
 
@@ -386,148 +343,48 @@ int REDirect::rd_lineset(const string & vertex_type, int nvertex, const float * 
    
    int REDirect::rd_point(const float p[3])
 {
-DB( "in point", 10);
-//	vector<float> to_plot = point_pipeline(p[0], p[1], p[2]);
+//DB( "in point");
+	int x = p[0];
+	int y = p[1];
 	float pigment[3];
 	pigment[0] = active.r_scale;
 	pigment[1] = active.g_scale;
 	pigment[2] = active.b_scale;
-//	set_pixel(to_plot[0], to_plot[1]);
-//	rd_write_pixel(to_plot[0], to_plot[1], pigment);
-
-	point p1;
-	p1.push_back(p[0]);
-	p1.push_back(p[1]);
-	p1.push_back(p[2]);
-	if(compute_point(p1) == -1)
-		return RD_OK;
-	p1 = point_pipeline(p1);
-DB( p[0] << " " << p[1] << " " << p[2], 10);
-DB( "set pixel", 10);
-
-
+	set_pixel(x, y);
+	rd_write_pixel(x, y, pigment);
 	return RD_OK;
 }
-
+/*
 int REDirect::rd_pointset(const string & vertex_type, int nvertex, const float * vertex)
 {
-	DB(vertex_type,0);
-	DB(nvertex,0);
-	DB(vertex,0);
-	stringstream input_stringstream(vertex_type);
-
-
-	vector<point> point_set;
-
-
-
-	for(int lines = 0; lines < (nvertex*3); lines += 3){
-		DB(vertex[lines], -2);
-		point coord;
-		coord.push_back(vertex[lines]);
-		coord.push_back(vertex[lines+1]);
-		coord.push_back(vertex[lines+2]);
-		point_set.push_back(coord);
-		DB(vertex[lines] << " " << vertex[lines+1] << " " << vertex[lines+2], -2);
-			
-		}
-	for(auto p : point_set){
-		point_pipeline(p);
-	}
-
-
-	return RD_OK;
+	return 0;
 }
 
 int REDirect::rd_polyset(const string & vertex_type, int nvertex, const float * vertex, int nface,   const int * face)
 {
-	vector<point> point_set;
-
-	DB(face,-2);
-
-	DB("In Polyset",-3);
-	for(int lines = 0; lines < (nvertex*3); lines += 3){
-		DB(vertex[lines], 0);
-		point coord;
-		coord.push_back(vertex[lines]);
-		coord.push_back(vertex[lines+1]);
-		coord.push_back(vertex[lines+2]);
-		point_set.push_back(coord);
-		DB("Points are: "<< vertex[lines] << " " << vertex[lines+1] << " " << vertex[lines+2], -0);
-			
-		}
-	vector< vector <int> > faces;
-	int p = 0;
-	for(int lines2 = 0; lines2 < nface; lines2++){
-		vector<int> corners;
-		while(face[p] != -1){
-			corners.push_back(face[p]);
-			DB(face[p], -2);
-			p++;
-		}
-		faces.push_back(corners);
-		p++;
-	}
-	DB("exit setup",-2);
-	point start;
-	point p2;
-	int vector_id;
-	vector<int> current_face;
-	for(int surface = 0; surface < nface; surface++){ // for each surface on polygon
-		current_face = faces[surface];
-		DB("Current face is: " << surface,-3);
-		vector_id = current_face[0];
-		start = point_set[vector_id];
-		int npoints = current_face.size();
-		vector_id = current_face[npoints-1];
-		p2 = point_set[vector_id];
-		line_pipeline(start, 'M');
-		for(int line = 1; line < npoints; line++){
-			vector_id = current_face[line];
-			p2 = point_set[vector_id];
-			DB("line " << line, -2);
-			line_pipeline(p2, 'D');
-			line_pipeline(p2, 'M');
-
-		}	
-	
-		line_pipeline(start, 'D');
-	
-	}
-
-
-
-	return RD_OK;
+	return 0;
 }
 
 int REDirect::rd_cone(float height, float radius, float thetamax)
 {
-	objects o;
-	o.draw_cone(radius, height);
-	return RD_OK;
+	return 0;
 }
 
 int REDirect::rd_cube(void)
 {
-	objects o;
-	o.draw_cube();
-	return RD_OK;
+	return 0;
 }
+
 int REDirect::rd_cylinder(float radius, float zmin, float zmax, float thetamax)
 {
-	objects o;
-	o.draw_cylinder(radius, zmin, zmax);
-	return RD_OK;
+	return 0;
 }
 
 int REDirect::rd_disk(float height, float radius, float theta)
 {
-	objects o;
-	o.draw_disk(radius, height);
-	return RD_OK;
+	return 0;
 }
 
-/*
 int REDirect::rd_hyperboloid(const float start[3], const float end[3], float thetamax)
 {
 return 0;
@@ -537,14 +394,12 @@ int REDirect::rd_paraboloid(float rmax, float zmin, float zmax, float thetamax)
 {
 	return 0;
 }
-*/
+
 int REDirect::rd_sphere(float radius, float zmin, float zmax, float thetamax)
 {
-	objects o;
-	o.draw_sphere(radius);
-	return RD_OK;
+	return 0;
 }
-/*
+
 int REDirect::rd_sqsphere(float radius, float north, float east, float zmin, float zmax, float thetamax)
 {
 return 0;
@@ -679,13 +534,11 @@ int REDirect::rd_k_specular(float Ks)
 
 int REDirect::rd_attribute_push(void)
 {
-	DB("CALLED AttrPush",-2);
 	return 0;
 }
 
 int REDirect::rd_attribute_pop(void)
 {
-	DB("CALLED AttrPop",-2);
 	return 0;
 }
 

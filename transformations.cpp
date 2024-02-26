@@ -328,6 +328,8 @@ xform transforms::camera_to_clip( double fov, double near, double far, double as
 
 
 	xform transforms::clip_to_device( int width, int height){
+		width = width- .001;
+		height = height- .001;
 		xform cmatrix = identity();
 		cmatrix[0][0] = float(width);
 		cmatrix[1][1] = float(-height);

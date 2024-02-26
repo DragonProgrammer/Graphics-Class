@@ -1,0 +1,20 @@
+Display "Line_single" "Screen" "rgbsingle"
+
+Format 600 600
+
+FrameBegin 1
+WorldBegin
+Color .8 1 0	
+
+
+
+
+
+Line 0 0 0 599 599 0
+Line 300 0 0 300 600 0
+Line 0 300 0 599 300 0
+Line 599 0 0 0 599 0 
+
+
+WorldEnd
+FrameEnd

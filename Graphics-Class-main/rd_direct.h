@@ -21,24 +21,24 @@ int rd_frame_begin(int frame_no);
 
 int rd_frame_end(void);
 /*
-int rd_render_init(void);  /i* Initialize renderer 
-
+int rd_render_init(void);  /i* Initialize renderer */
+/*
 int rd_render_cleanup(void);
-*/
- /**********************   Camera  ******************************************/
+
+ /s**********************   Camera  ******************************************/
 
 int rd_camera_eye(const float eyepoint[3]);
 
 int rd_camera_at(const float atpoint[3]);
 
 int rd_camera_up(const float up[3]);
-
+/*
 int rd_camera_fov(float fov);
 
 int rd_clipping(float znear, float zfar);
  
- /**********************   Transformations **********************************/
-
+ /w**********************   Transformations **********************************/
+/*
 int rd_translate(const float offset[3]);
 
 int rd_scale(const float scale_factor[3]);
@@ -48,14 +48,14 @@ int rd_rotate_xy(float angle);
 int rd_rotate_yz(float angle);
 
 int rd_rotate_zx(float angle);
-/*
+
 int rd_matrix(const float * mat);
-*/	       
+	       
 int rd_xform_push(void);
 
 int rd_xform_pop(void);
 
-  /**********************   Geometric Objects  *******************************/
+  /s**********************   Geometric Objects  *******************************/
 
 
 
@@ -75,7 +75,7 @@ int rd_line(const float start[3], const float end[3]);
 
 
 int rd_point(const float p[3]);
-
+/*
 int rd_pointset(const string & vertex_type, int nvertex, const float * vertex);
 
 int rd_polyset(const string & vertex_type, int nvertex, const float * vertex, int nface,   const int * face);
@@ -88,13 +88,12 @@ int rd_cylinder(float radius, float zmin, float zmax, float thetamax);
 
 int rd_disk(float height, float radius, float theta);
 
-/*
 int rd_hyperboloid(const float start[3], const float end[3], float thetamax); 
 
 int rd_paraboloid(float rmax, float zmin, float zmax, float thetamax);
-*/
+
 int rd_sphere(float radius, float zmin, float zmax, float thetamax);
-/*
+
 int rd_sqsphere(float radius, float north, float east, float zmin, float zmax, float thetamax); 
 
 int rd_sqtorus(float radius1, float radius2, float north, float east, float phimin, float phimax, float thetamax);
@@ -135,11 +134,11 @@ int rd_k_diffuse(float Kd);
 int rd_k_emission(float Ke);
 
 int rd_k_specular(float Ks);
-*/
-//int rd_attribute_push(void);
 
-//int rd_attribute_pop(void);
-/*
+int rd_attribute_push(void);
+
+int rd_attribute_pop(void);
+
  /.****************************   Mapping ******************************/
 /*
 int rd_map_border(const string & map_type, const string & horizontal, const string & vertical);
