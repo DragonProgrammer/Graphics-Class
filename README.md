@@ -42,7 +42,7 @@ Images Made
 
  **image6.txt
 
-  The image created heare is a set of concentric circles with the spaces between each filled with a different color. And then the background being changed.
+  The image created heare is a set of concentric circles with the spaces between each filled with a different color.
   
  ![Alt text](image6.jpg)
 
