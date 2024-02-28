@@ -32,17 +32,25 @@ Images Made
 
   This one contains 2 sets of nested circles of different colors. The color pattern is reversed for each set of circles.
  ![Alt text](image4.jpg)
+
+ 
 **image5.txt
 
   This is a series of crosed line of 2 diferent colors with the partitions they create filled in with different colors.
  ![Alt text](image5.jpg)
+
+ 
 **image6.txt
 
   The image created heare is a set of concentric circles with the spaces between each filled with a different color. And then the background being changed.
+  
  ![Alt text](image6.jpg)
+
+ 
 **image7.txt
 
   This one also has a set of concentric circles filled as well. After which a set of lines bisect the circles, and the partitions around the edge are filled with different colors.
+  
  ![Alt text](image7.jpg)
 __________________________________________________________________________________________________________________________________________________________________________________
 
