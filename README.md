@@ -3,6 +3,8 @@ These are the final results of a graphics class. We were given a framework with 
 My code can be found in rd_direct.cpp, with the rd_direct.h having functions we did not get to in class commented out. I also mad globals.cpp and globals.h to handle the helper functions I needed.
 
 Using a vector of the struct color (found in color.h) the program can create images based on text file inputs.
+
+To run the first set of images you will need to use the code withing the Graphics Class main folder as they use an viewpoint that is directly aboove the display plane. If run with the final program they are executed outside the viewscreen, as we are using a view from an angle and running transforms.
 ______________________________________________________________________________________________________________________________________
 Text File Format
 
@@ -60,6 +62,5 @@ This is the final project image. It is a simplified version of the Magic the gat
  ![Alt text](cardback.jpg)
 __________________________________________________________________________________________________________________________________________________________________________________
 
-In order to view these images you will need an image program running in the background.
+In order to view these images you will need an image program running in the background.  On a Windows platform you could run Cygwin or use Xlaunch and "export DISPLAY=:0" from a linux enviroment.
 
-( THIS IS WHERE I PUT THE SETING FOR THAT ONE I FIGURE THAT OUT )
