@@ -26,6 +26,8 @@ Images Made
 
   This is a pinwheel of different colored lines, visualy, going from the center of the images to the edges.
 
+  ![Alt text](image1.jpg)
+
 **image4.txt
 
   This one contains 2 sets of nested circles of different colors. The color pattern is reversed for each set of circles.
