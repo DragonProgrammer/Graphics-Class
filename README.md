@@ -37,7 +37,8 @@ Images Made
  
 **image5.txt
 
-  This is a series of crosed line of 2 diferent colors with the partitions they create filled in with different colors.
+  This is a square of squares, with each quatrant being a different color.
+  
  ![Alt text](image5.jpg)
 
  **image6.txt
@@ -51,6 +52,12 @@ Images Made
   This one also has a set of concentric circles filled as well. After which a set of lines bisect the circles, and the partitions around the edge are filled with different colors.
   
  ![Alt text](image7.jpg)
+
+**Cardback.txt
+
+This is the final project image. It is a simplified version of the Magic the gathering card back.
+
+ ![Alt text](cardback.jpg)
 __________________________________________________________________________________________________________________________________________________________________________________
 
 In order to view these images you will need an image program running in the background.
